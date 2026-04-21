@@ -14,18 +14,18 @@ export function Next() {
   // Show working task if resuming
   const displayTask = workingTask ?? nextTask;
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (!displayTask) return;
-    startTask(displayTask.id);
+    await startTask(displayTask.id);
     navigate('/working');
   };
 
   const handleDrift = () => {
     if (!displayTask) return;
     setExiting('drift');
-    setTimeout(() => {
-      driftTask(displayTask.id);
-      navigate('/');
+    setTimeout(async () => {
+      await driftTask(displayTask.id);
+      setExiting(null);
     }, 300);
   };
 

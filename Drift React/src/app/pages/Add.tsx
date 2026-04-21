@@ -6,14 +6,31 @@ import { useTaskContext } from "../context/TaskContext";
 export function Add() {
   const navigate = useNavigate();
   const location = useLocation();
-  const returnTo: string =
-    (location.state as any)?.returnTo ?? "/";
+  const returnTo: string = (location.state as any)?.returnTo ?? "/";
   const { addTask } = useTaskContext();
   const [value, setValue] = useState("");
+  const [bottomOffset, setBottomOffset] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     textareaRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const handleResize = () => {
+      const offset = window.innerHeight - viewport.height - viewport.offsetTop;
+      setBottomOffset(Math.max(0, offset));
+    };
+
+    viewport.addEventListener("resize", handleResize);
+    viewport.addEventListener("scroll", handleResize);
+    return () => {
+      viewport.removeEventListener("resize", handleResize);
+      viewport.removeEventListener("scroll", handleResize);
+    };
   }, []);
 
   const handleAdd = () => {
@@ -81,29 +98,32 @@ export function Add() {
             lineHeight: 1.6,
           }}
         />
+      </div>
 
-        <div className="mt-8 flex flex-col gap-3">
-          <button
-            onClick={handleAdd}
-            disabled={!value.trim()}
-            className="w-full rounded-2xl py-5 px-6 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed"
-            style={{
-              background: value.trim() ? "#f2f2f2" : "#1a1a1a",
-              color: "#0c0c0c",
-            }}
-          >
-            <span style={{ fontSize: "17px", fontWeight: 400 }}>
-              Add task
-            </span>
-          </button>
-
-          <p
-            className="text-center text-[#2e2e2e]"
-            style={{ fontSize: "11px" }}
-          >
-            ⌘ + Enter to add
-          </p>
-        </div>
+      {/* Button — floats above keyboard */}
+      <div
+        className="flex flex-col gap-3 pt-6"
+        style={{ paddingBottom: `${bottomOffset + 24}px`, transition: "padding-bottom 0.2s ease" }}
+      >
+        <button
+          onClick={handleAdd}
+          disabled={!value.trim()}
+          className="w-full rounded-2xl py-5 px-6 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed"
+          style={{
+            background: value.trim() ? "#f2f2f2" : "#1a1a1a",
+            color: "#0c0c0c",
+          }}
+        >
+          <span style={{ fontSize: "17px", fontWeight: 400 }}>
+            Add task
+          </span>
+        </button>
+        <p
+          className="text-center text-[#2e2e2e]"
+          style={{ fontSize: "11px" }}
+        >
+          ⌘ + Enter to add
+        </p>
       </div>
     </motion.div>
   );
