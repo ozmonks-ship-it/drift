@@ -13,13 +13,13 @@ export function Working() {
   const task = getWorkingTask();
 
   useEffect(() => {
-    if (!task) {
+    if (!task && !drifting) {
       navigate('/');
       return;
     }
     const interval = setInterval(() => setElapsed(e => e + 1), 1000);
     return () => clearInterval(interval);
-  }, [task, navigate]);
+  }, [task, navigate, drifting]);
 
   const formatElapsed = (s: number) => {
     if (s < 60) return `${s}s`;
@@ -39,8 +39,8 @@ export function Working() {
   const handleDrift = () => {
     if (!task) return;
     setDrifting(true);
-    setTimeout(() => {
-      driftTask(task.id);
+    setTimeout(async () => {
+      await driftTask(task.id);
       navigate('/');
     }, 300);
   };

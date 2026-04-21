@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { supabase } from '../../lib/supabase';
 
 export interface Task {
   id: string;
   description: string;
   status: 'pending' | 'working' | 'completed' | 'binned';
   createdAt: number;
-  order: number;
 }
 
 interface TaskContextType {
@@ -22,43 +22,47 @@ interface TaskContextType {
 
 const TaskContext = createContext<TaskContextType | null>(null);
 
-const STORAGE_KEY = 'drift_tasks_v1';
-
-function loadTasks(): Task[] {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-  } catch {
-    return [];
-  }
-}
-
-function saveTasks(tasks: Task[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-}
-
 export function TaskProvider({ children }: { children: React.ReactNode }) {
-  const [tasks, setTasks] = useState<Task[]>(loadTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   useEffect(() => {
-    saveTasks(tasks);
-  }, [tasks]);
+    async function fetchTasks() {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .order('created_at', { ascending: true });
+      if (!error && data) {
+        setTasks(data.map(row => ({
+          id: row.id,
+          description: row.title,
+          status: row.status,
+          createdAt: new Date(row.created_at).getTime(),
+        })));
+      }
+    }
+    fetchTasks();
+  }, []);
 
-  const addTask = useCallback((description: string) => {
-    const now = Date.now();
-    const newTask: Task = {
-      id: `task_${now}_${Math.random().toString(36).slice(2)}`,
-      description: description.trim(),
-      status: 'pending',
-      createdAt: now,
-      order: now,
-    };
-    setTasks(prev => [...prev, newTask]);
+  const addTask = useCallback(async (description: string) => {
+    const { data, error } = await supabase
+      .from('tasks')
+      .insert({ title: description.trim(), status: 'pending', energy: 'medium' })
+      .select()
+      .single();
+    if (!error && data) {
+      setTasks(prev => [...prev, {
+        id: data.id,
+        description: data.title,
+        status: data.status,
+        createdAt: new Date(data.created_at).getTime(),
+      }]);
+    }
   }, []);
 
   const getNextTask = useCallback((): Task | null => {
     const pending = tasks
       .filter(t => t.status === 'pending')
-      .sort((a, b) => a.order - b.order);
+      .sort((a, b) => a.createdAt - b.createdAt);
     return pending[0] ?? null;
   }, [tasks]);
 
@@ -66,37 +70,32 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     return tasks.find(t => t.status === 'working') ?? null;
   }, [tasks]);
 
-  const startTask = useCallback((id: string) => {
-    setTasks(prev =>
-      prev.map(t => {
-        if (t.id === id) return { ...t, status: 'working' };
-        if (t.status === 'working') return { ...t, status: 'pending' };
-        return t;
-      })
-    );
+  const startTask = useCallback(async (id: string) => {
+    await supabase.from('tasks').update({ status: 'working' }).eq('id', id);
+    await supabase.from('tasks').update({ status: 'pending' }).eq('status', 'working').neq('id', id);
+    setTasks(prev => prev.map(t => {
+      if (t.id === id) return { ...t, status: 'working' };
+      if (t.status === 'working') return { ...t, status: 'pending' };
+      return t;
+    }));
   }, []);
 
-  const driftTask = useCallback((id: string) => {
-    const maxOrder = Math.max(...tasks.map(t => t.order), 0);
-    setTasks(prev =>
-      prev.map(t =>
-        t.id === id
-          ? { ...t, status: 'pending', order: maxOrder + 1 }
-          : t
-      )
-    );
-  }, [tasks]);
-
-  const binTask = useCallback((id: string) => {
-    setTasks(prev =>
-      prev.map(t => (t.id === id ? { ...t, status: 'binned' } : t))
-    );
+  const driftTask = useCallback(async (id: string) => {
+    const now = new Date().toISOString();
+    await supabase.from('tasks').update({ status: 'pending', created_at: now }).eq('id', id);
+    setTasks(prev => prev.map(t =>
+      t.id === id ? { ...t, status: 'pending', createdAt: Date.now() } : t
+    ));
   }, []);
 
-  const completeTask = useCallback((id: string) => {
-    setTasks(prev =>
-      prev.map(t => (t.id === id ? { ...t, status: 'completed' } : t))
-    );
+  const binTask = useCallback(async (id: string) => {
+    await supabase.from('tasks').update({ status: 'binned' }).eq('id', id);
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'binned' } : t));
+  }, []);
+
+  const completeTask = useCallback(async (id: string) => {
+    await supabase.from('tasks').update({ status: 'completed' }).eq('id', id);
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'completed' } : t));
   }, []);
 
   const pendingCount = tasks.filter(t => t.status === 'pending').length;
