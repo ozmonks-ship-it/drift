@@ -47,7 +47,7 @@ export function Add() {
 
   return (
     <motion.div
-      className="flex flex-col min-h-screen px-8 py-12"
+      className="flex flex-col min-h-[100dvh] px-8 py-12"
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -24 }}

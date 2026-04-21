@@ -14,7 +14,7 @@ export function Done() {
 
   return (
     <motion.div
-      className="flex flex-col min-h-screen px-8 py-12 items-center justify-center"
+      className="flex flex-col min-h-[100dvh] px-8 py-12 items-center justify-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
