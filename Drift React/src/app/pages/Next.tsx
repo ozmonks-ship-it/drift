@@ -41,7 +41,7 @@ export function Next() {
   if (!displayTask) {
     return (
       <motion.div
-        className="flex flex-col min-h-screen px-8 py-12"
+        className="flex flex-col min-h-[100dvh] px-8 py-12"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4 }}
@@ -79,7 +79,7 @@ export function Next() {
 
   return (
     <motion.div
-      className="flex flex-col min-h-screen px-8 py-12"
+      className="flex flex-col min-h-[100dvh] px-8 py-12"
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: exiting ? 0 : 1, x: exiting === 'drift' ? -24 : exiting === 'bin' ? 24 : 0 }}
       transition={{ duration: 0.3 }}
