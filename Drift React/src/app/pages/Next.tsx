@@ -26,6 +26,7 @@ export function Next() {
     setTimeout(async () => {
       await driftTask(displayTask.id);
       setExiting(null);
+      navigate('/');
     }, 300);
   };
 

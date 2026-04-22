@@ -18,12 +18,14 @@ interface TaskContextType {
   completeTask: (id: string) => void;
   getWorkingTask: () => Task | null;
   pendingCount: number;
+  setNextTask: (id: string | null) => void;
 }
 
 const TaskContext = createContext<TaskContextType | null>(null);
 
 export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [nextTaskId, setNextTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -60,11 +62,14 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const getNextTask = useCallback((): Task | null => {
+    if (nextTaskId) {
+      return tasks.find(t => t.id === nextTaskId && t.status === 'pending') ?? null;
+    }
     const pending = tasks
       .filter(t => t.status === 'pending')
       .sort((a, b) => a.createdAt - b.createdAt);
     return pending[0] ?? null;
-  }, [tasks]);
+  }, [tasks, nextTaskId]);
 
   const getWorkingTask = useCallback((): Task | null => {
     return tasks.find(t => t.status === 'working') ?? null;
@@ -111,6 +116,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       completeTask,
       getWorkingTask,
       pendingCount,
+      setNextTask: setNextTaskId,
     }}>
       {children}
     </TaskContext.Provider>

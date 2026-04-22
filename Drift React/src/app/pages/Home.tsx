@@ -1,11 +1,15 @@
 import { useNavigate } from 'react-router';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useTaskContext } from '../context/TaskContext';
+import { useState } from 'react';
+import { pickNextTask } from '../../lib/claude';
 
 export function Home() {
   const navigate = useNavigate();
-  const { pendingCount, getWorkingTask } = useTaskContext();
+  const { pendingCount, getWorkingTask, tasks, setNextTask } = useTaskContext();
   const workingTask = getWorkingTask();
+  const [showEnergy, setShowEnergy] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const hasAnything = pendingCount > 0 || !!workingTask;
 
@@ -13,8 +17,17 @@ export function Home() {
     if (workingTask) {
       navigate('/working');
     } else {
-      navigate('/next');
+      setShowEnergy(true);
     }
+  };
+
+  const handleEnergySelect = async (energy: 'high' | 'medium' | 'low') => {
+    setLoading(true);
+    const pending = tasks.filter(t => t.status === 'pending');
+    const pickedId = await pickNextTask(pending, energy);
+    setNextTask(pickedId);
+    setLoading(false);
+    navigate('/next');
   };
 
   return (
@@ -39,7 +52,7 @@ export function Home() {
           </h1>
         </motion.div>
 
-        {/* Status / Context */}
+        {/* Status */}
         <motion.div
           className="mt-8"
           initial={{ opacity: 0 }}
@@ -47,7 +60,6 @@ export function Home() {
           transition={{ delay: 0.35 }}
         >
           {workingTask ? (
-            /* In-progress banner */
             <div className="border border-[#1e1e1e] rounded-2xl p-5">
               <p className="text-[#2e2e2e] mb-2" style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
                 In progress
@@ -66,52 +78,82 @@ export function Home() {
             </p>
           )}
         </motion.div>
+
+        {/* Energy selector */}
+        <AnimatePresence>
+          {showEnergy && (
+            <motion.div
+              className="mt-10"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.3 }}
+            >
+              <p className="text-[#3a3a3a] mb-5 tracking-[0.2em] uppercase" style={{ fontSize: '11px' }}>
+                How's your energy?
+              </p>
+              <div className="flex flex-col gap-3">
+                {[
+                  { label: '🔋 High', value: 'high' as const },
+                  { label: '🔆 Medium', value: 'medium' as const },
+                  { label: '🪫 Low', value: 'low' as const },
+                ].map(option => (
+                  <button
+                    key={option.value}
+                    onClick={() => handleEnergySelect(option.value)}
+                    disabled={loading}
+                    className="w-full rounded-2xl py-4 px-6 border border-[#242424] hover:border-[#383838] transition-colors text-left disabled:opacity-40"
+                    style={{ color: '#888', fontSize: '16px' }}
+                  >
+                    {loading ? 'Picking your task...' : option.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Actions */}
-      <motion.div
-        className="flex flex-col gap-3"
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        {/* Primary: next/resume */}
-        <button
-          onClick={handleNext}
-          disabled={!hasAnything}
-          className="w-full rounded-2xl py-5 px-6 transition-all duration-200 disabled:opacity-15 disabled:cursor-not-allowed flex items-center justify-between"
-          style={{
-            background: '#f2f2f2',
-            color: '#0c0c0c',
-          }}
+      {!showEnergy && (
+        <motion.div
+          className="flex flex-col gap-3"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <span style={{ fontSize: '17px', fontWeight: 400 }}>
-            {workingTask ? 'Resume task' : "What's next?"}
-          </span>
-          <span style={{ fontSize: '17px', opacity: 0.4 }}>→</span>
-        </button>
-
-        {/* Secondary: add */}
-        <button
-          onClick={() => navigate('/add')}
-          className="w-full rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#2a2a2a] transition-colors flex items-center justify-between"
-          style={{ color: '#555' }}
-        >
-          <span style={{ fontSize: '17px', fontWeight: 400 }}>Add task</span>
-          <span style={{ fontSize: '17px', opacity: 0.4 }}>+</span>
-        </button>
-
-        {/* If working task, also show "What's next?" to skip to queue */}
-        {workingTask && pendingCount > 0 && (
           <button
-            onClick={() => navigate('/next')}
-            className="w-full rounded-2xl py-4 px-6 transition-colors"
-            style={{ color: '#333', fontSize: '14px' }}
+            onClick={handleNext}
+            disabled={!hasAnything}
+            className="w-full rounded-2xl py-5 px-6 transition-all duration-200 disabled:opacity-15 disabled:cursor-not-allowed flex items-center justify-between"
+            style={{ background: '#f2f2f2', color: '#0c0c0c' }}
           >
-            See what's next →
+            <span style={{ fontSize: '17px', fontWeight: 400 }}>
+              {workingTask ? 'Resume task' : "What's next?"}
+            </span>
+            <span style={{ fontSize: '17px', opacity: 0.4 }}>→</span>
           </button>
-        )}
-      </motion.div>
+
+          <button
+            onClick={() => navigate('/add')}
+            className="w-full rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#2a2a2a] transition-colors flex items-center justify-between"
+            style={{ color: '#555' }}
+          >
+            <span style={{ fontSize: '17px', fontWeight: 400 }}>Add task</span>
+            <span style={{ fontSize: '17px', opacity: 0.4 }}>+</span>
+          </button>
+
+          {workingTask && pendingCount > 0 && (
+            <button
+              onClick={() => navigate('/next')}
+              className="w-full rounded-2xl py-4 px-6 transition-colors"
+              style={{ color: '#333', fontSize: '14px' }}
+            >
+              See what's next →
+            </button>
+          )}
+        </motion.div>
+      )}
     </motion.div>
   );
 }
