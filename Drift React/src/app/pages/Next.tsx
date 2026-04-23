@@ -1,18 +1,41 @@
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaskContext } from '../context/TaskContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+type Phase = 'finding' | 'revealing' | 'ready';
 
 export function Next() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { getNextTask, getWorkingTask, startTask, driftTask, binTask } = useTaskContext();
   const [exiting, setExiting] = useState<string | null>(null);
 
+  const fromEnergySelect = !!(location.state as any)?.finding;
+  const [phase, setPhase] = useState<Phase>(fromEnergySelect ? 'finding' : 'ready');
+  const [visible, setVisible] = useState(!fromEnergySelect);
+  
+  useEffect(() => {
+    if (fromEnergySelect) {
+      const t = setTimeout(() => setVisible(true), 50);
+      return () => clearTimeout(t);
+    }
+  }, [fromEnergySelect]);
+
   const nextTask = getNextTask();
   const workingTask = getWorkingTask();
-
-  // Show working task if resuming
   const displayTask = workingTask ?? nextTask;
+
+  useEffect(() => {
+    if (phase === 'finding') {
+      const t1 = setTimeout(() => setPhase('revealing'), 1100);
+      return () => clearTimeout(t1);
+    }
+    if (phase === 'revealing') {
+      const t2 = setTimeout(() => setPhase('ready'), 700);
+      return () => clearTimeout(t2);
+    }
+  }, [phase]);
 
   const handleStart = async () => {
     if (!displayTask) return;
@@ -33,8 +56,8 @@ export function Next() {
   const handleBin = () => {
     if (!displayTask) return;
     setExiting('bin');
-    setTimeout(() => {
-      binTask(displayTask.id);
+    setTimeout(async () => {
+      await binTask(displayTask.id);
       navigate('/');
     }, 300);
   };
@@ -54,7 +77,6 @@ export function Next() {
         >
           ← back
         </button>
-
         <div className="flex-1 flex flex-col justify-center">
           <p className="text-[#3a3a3a] tracking-[0.25em] uppercase mb-4" style={{ fontSize: '11px' }}>
             all clear
@@ -66,7 +88,6 @@ export function Next() {
             Add a task to get started.
           </p>
         </div>
-
         <button
           onClick={() => navigate('/add')}
           className="w-full rounded-2xl py-5 px-6"
@@ -80,68 +101,154 @@ export function Next() {
 
   return (
     <motion.div
-      className="flex flex-col min-h-[100dvh] px-8 py-12"
-      initial={{ opacity: 0, x: 24 }}
-      animate={{ opacity: exiting ? 0 : 1, x: exiting === 'drift' ? -24 : exiting === 'bin' ? 24 : 0 }}
-      transition={{ duration: 0.3 }}
+      className="flex flex-col min-h-[100dvh] px-8 py-12 overflow-hidden"
+      initial={{ opacity: fromEnergySelect ? 0 : 0, x: fromEnergySelect ? 0 : 24 }}
+      animate={{
+        opacity: exiting ? 0 : 1,
+        x: exiting === 'drift' ? -24 : exiting === 'bin' ? 24 : 0,
+      }}
+      transition={{ duration: fromEnergySelect ? 0.25 : 0.3 }}
     >
-      <button
-        onClick={() => navigate('/')}
-        className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
-        style={{ fontSize: '13px', letterSpacing: '0.05em' }}
-      >
-        ← back
-      </button>
+      {/* Back — hidden during finding phase */}
+      <AnimatePresence>
+        {phase !== 'finding' && visible && (
+          <motion.button
+            onClick={() => navigate('/')}
+            className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
+            style={{ fontSize: '13px', letterSpacing: '0.05em' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            ← back
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Finding phase — ripple animation */}
+      <AnimatePresence>
+        {phase === 'finding' && (
+          <motion.div
+            key="finding"
+            className="absolute inset-0 flex flex-col items-center justify-center gap-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="relative flex items-center justify-center w-16 h-16">
+              {[0, 1, 2].map((i) => (
+                <motion.span
+                  key={i}
+                  className="absolute rounded-full border border-[#333]"
+                  initial={{ width: 8, height: 8, opacity: 0.8 }}
+                  animate={{
+                    width: [8, 64],
+                    height: [8, 64],
+                    opacity: [0.6, 0],
+                  }}
+                  transition={{
+                    duration: 1.4,
+                    delay: i * 0.42,
+                    repeat: Infinity,
+                    ease: 'easeOut',
+                  }}
+                />
+              ))}
+              <motion.span
+                className="w-1.5 h-1.5 rounded-full bg-[#555]"
+                animate={{ opacity: [0.4, 1, 0.4] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
+              />
+            </div>
+            <motion.p
+              className="text-[#2e2e2e] tracking-[0.28em] uppercase"
+              style={{ fontSize: '10px' }}
+              animate={{ opacity: [0.4, 0.8, 0.4] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              finding your task
+            </motion.p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Task display */}
-      <div className="flex-1 flex flex-col justify-center">
-        <motion.div
-          key={displayTask.id}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
-          <p className="text-[#3a3a3a] tracking-[0.25em] uppercase mb-6" style={{ fontSize: '11px' }}>
-            {workingTask ? 'in progress' : 'up next'}
-          </p>
-
-          <p
-            className="text-white"
-            style={{ fontSize: '26px', fontWeight: 300, letterSpacing: '-0.01em', lineHeight: 1.4 }}
+      <AnimatePresence>
+        {phase !== 'finding' && (
+          <motion.div
+            key="task-content"
+            className="flex-1 flex flex-col justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.15 }}
           >
-            {displayTask.description}
-          </p>
-        </motion.div>
-      </div>
+            <motion.div
+              key={displayTask.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <motion.p
+                className="text-[#3a3a3a] tracking-[0.25em] uppercase mb-6"
+                style={{ fontSize: '11px' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+              >
+                {workingTask ? 'in progress' : 'up next'}
+              </motion.p>
+              <motion.p
+                className="text-white"
+                style={{ fontSize: '26px', fontWeight: 300, letterSpacing: '-0.01em', lineHeight: 1.4 }}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                {displayTask.description}
+              </motion.p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Actions */}
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={handleStart}
-          className="w-full rounded-2xl py-5 px-6 transition-all duration-200 hover:opacity-90"
-          style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400, textAlign: 'left' }}
-        >
-          Start →
-        </button>
-
-        <div className="flex gap-3">
-          <button
-            onClick={handleDrift}
-            className="flex-1 rounded-2xl py-5 px-6 border border-[#242424] hover:border-[#383838] transition-colors"
-            style={{ color: '#666', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
-          >
-            Drift ~
-          </button>
-
-          <button
-            onClick={handleBin}
-            className="flex-1 rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#2e2e2e] transition-colors"
-            style={{ color: '#3a3a3a', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
-          >
-            Bin ×
-          </button>
-        </div>
-      </div>
+<motion.div
+  className="flex flex-col gap-3"
+  initial={{ opacity: 0, y: 16 }}
+  animate={{
+    opacity: phase === 'ready' ? 1 : 0,
+    y: phase === 'ready' ? 0 : 16,
+  }}
+  style={{ pointerEvents: phase === 'ready' ? 'auto' : 'none' }}
+  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+>
+            <button
+              onClick={handleStart}
+              className="w-full rounded-2xl py-5 px-6 transition-all duration-200 hover:opacity-90"
+              style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400, textAlign: 'left' }}
+            >
+              Start →
+            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={handleDrift}
+                className="flex-1 rounded-2xl py-5 px-6 border border-[#242424] hover:border-[#383838] transition-colors"
+                style={{ color: '#666', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
+              >
+                Drift ~
+              </button>
+              <button
+                onClick={handleBin}
+                className="flex-1 rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#2e2e2e] transition-colors"
+                style={{ color: '#3a3a3a', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
+              >
+                Bin ×
+              </button>
+            </div>
+          </motion.div>
+        
     </motion.div>
   );
 }
