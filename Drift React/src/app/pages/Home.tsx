@@ -42,6 +42,15 @@ export function Home() {
       animate={{ opacity: selectedEnergy ? 0 : 1 }}
       transition={{ duration: 0.3, delay: selectedEnergy ? 0.18 : 0 }}
     >
+      {showEnergy && (
+      <button
+        onClick={() => setShowEnergy(false)}
+        className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
+        style={{ fontSize: '13px', letterSpacing: '0.05em' }}
+      >
+        ← back
+      </button>
+    )}
       {/* Logo / Hero */}
       <div className="flex-1 flex flex-col justify-center">
         <motion.div
