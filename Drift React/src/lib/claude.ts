@@ -57,12 +57,13 @@ export async function pickNextTask(
       messages: [
         {
           role: 'user',
-          content: `My current energy level is: ${energy.toUpperCase()}
-
-Here are my pending tasks:
-${taskList}
-
-Pick the single best task for me to do right now given my energy level and personal context. Reply with ONLY the task ID, nothing else.`,
+          content: `The current time is ${new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true })} on ${new Date().toLocaleDateString('en-AU', { weekday: 'long' })}.
+          My current energy level is: ${energy.toUpperCase()}
+          
+          Here are my pending tasks:
+          ${taskList}
+          
+          Pick the single best task for me to do right now given the time, day, my energy level and personal context. Reply with ONLY the task ID, nothing else.`,
         },
       ],
     }),
