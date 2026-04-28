@@ -2,13 +2,14 @@ import { useNavigate, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaskContext } from '../context/TaskContext';
 import { useState, useEffect } from 'react';
+import { pickNextTask } from '../../lib/claude';
 
 type Phase = 'finding' | 'revealing' | 'ready';
 
 export function Next() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { getNextTask, getWorkingTask, startTask, driftTask, binTask } = useTaskContext();
+  const { getNextTask, getWorkingTask, startTask, driftTask, binTask, tasks, setNextTask } = useTaskContext();
   const [exiting, setExiting] = useState<string | null>(null);
 
   const fromEnergySelect = !!(location.state as any)?.finding;
@@ -48,8 +49,19 @@ export function Next() {
     setExiting('drift');
     setTimeout(async () => {
       await driftTask(displayTask.id);
-      setExiting(null);
-      navigate('/');
+      const energy = (location.state as any)?.energy;
+      if (energy) {
+        const pending = tasks
+          .filter(t => t.status === 'pending' && t.id !== displayTask.id);
+        const pickedId = await pickNextTask(pending, energy);
+        setNextTask(pickedId);
+        setExiting(null);
+        setPhase('finding');
+        setTimeout(() => setPhase('revealing'), 1100);
+        setTimeout(() => setPhase('ready'), 1800);
+      } else {
+        navigate('/');
+      }
     }, 300);
   };
 
