@@ -19,6 +19,8 @@ interface TaskContextType {
   getWorkingTask: () => Task | null;
   pendingCount: number;
   setNextTask: (id: string | null) => void;
+  isPickingNextTask: boolean;
+  setIsPickingNextTask: (isPicking: boolean) => void;
 }
 
 const TaskContext = createContext<TaskContextType | null>(null);
@@ -26,6 +28,7 @@ const TaskContext = createContext<TaskContextType | null>(null);
 export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [nextTaskId, setNextTaskId] = useState<string | null>(null);
+  const [isPickingNextTask, setIsPickingNextTask] = useState(false);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -118,6 +121,8 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       getWorkingTask,
       pendingCount,
       setNextTask: setNextTaskId,
+      isPickingNextTask,
+      setIsPickingNextTask,
     }}>
       {children}
     </TaskContext.Provider>

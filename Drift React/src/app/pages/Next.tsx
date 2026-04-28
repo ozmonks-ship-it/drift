@@ -9,12 +9,12 @@ type Phase = 'finding' | 'revealing' | 'ready';
 export function Next() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { getNextTask, getWorkingTask, startTask, driftTask, binTask, tasks, setNextTask } = useTaskContext();
+  const { getNextTask, getWorkingTask, startTask, driftTask, binTask, tasks, setNextTask, isPickingNextTask, setIsPickingNextTask } = useTaskContext();
   const [exiting, setExiting] = useState<string | null>(null);
 
   const fromEnergySelect = !!(location.state as any)?.finding;
   const [pickSource, setPickSource] = useState<PickSource | null>(((location.state as any)?.pickSource as PickSource | undefined) ?? null);
-  const [phase, setPhase] = useState<Phase>(fromEnergySelect ? 'finding' : 'ready');
+  const [phase, setPhase] = useState<Phase>(fromEnergySelect && isPickingNextTask ? 'finding' : 'ready');
   const [visible, setVisible] = useState(!fromEnergySelect);
   
   useEffect(() => {
@@ -29,15 +29,8 @@ export function Next() {
   const displayTask = workingTask ?? nextTask;
 
   useEffect(() => {
-    if (phase === 'finding') {
-      const t1 = setTimeout(() => setPhase('revealing'), 1100);
-      return () => clearTimeout(t1);
-    }
-    if (phase === 'revealing') {
-      const t2 = setTimeout(() => setPhase('ready'), 700);
-      return () => clearTimeout(t2);
-    }
-  }, [phase]);
+    setPhase(isPickingNextTask ? 'finding' : 'ready');
+  }, [isPickingNextTask]);
 
   const handleStart = async () => {
     if (!displayTask) return;
@@ -48,20 +41,26 @@ export function Next() {
   const handleDrift = () => {
     if (!displayTask) return;
     setExiting('drift');
+    setIsPickingNextTask(true);
+    setPhase('finding');
     setTimeout(async () => {
+      // End exit animation so the finding state can be visible while Claude is in-flight.
+      setExiting(null);
       await driftTask(displayTask.id);
       const energy = (location.state as any)?.energy;
       if (energy) {
         const pending = tasks
           .filter(t => t.status === 'pending' && t.id !== displayTask.id);
-        const pick = await pickNextTask(pending, energy);
-        setNextTask(pick.id);
-        setPickSource(pick.source);
-        setExiting(null);
-        setPhase('finding');
-        setTimeout(() => setPhase('revealing'), 1100);
-        setTimeout(() => setPhase('ready'), 1800);
+        try {
+          const pick = await pickNextTask(pending, energy);
+          setNextTask(pick.id);
+          setPickSource(pick.source);
+          setExiting(null);
+        } finally {
+          setIsPickingNextTask(false);
+        }
       } else {
+        setIsPickingNextTask(false);
         navigate('/');
       }
     }, 300);
