@@ -31,16 +31,23 @@ ENERGY MAPPING:
 - Low energy → quick wins, easy tasks, light admin
 `;
 
+export type PickSource = 'claude' | 'fallback' | 'single' | 'empty';
+
+export interface PickResult {
+  id: string | null;
+  source: PickSource;
+}
+
 export async function pickNextTask(
   tasks: { id: string; description: string }[],
   energy: 'high' | 'medium' | 'low'
-): Promise<string | null> {
-  if (tasks.length === 0) return null;
-  if (tasks.length === 1) return tasks[0].id;
+): Promise<PickResult> {
+  if (tasks.length === 0) return { id: null, source: 'empty' };
+  if (tasks.length === 1) return { id: tasks[0].id, source: 'single' };
 
   const taskList = tasks
-    .map((t, i) => `${i + 1}. [ID: ${t.id}] ${t.description}`)
-    .join('\n');
+  .map(t => `[${t.id}] ${t.description}`)
+  .join('\n');
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -52,27 +59,52 @@ export async function pickNextTask(
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 100,
+      max_tokens: 1000,
       system: PERSONAL_CONTEXT,
       messages: [
         {
           role: 'user',
           content: `The current time is ${new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true })} on ${new Date().toLocaleDateString('en-AU', { weekday: 'long' })}.
-          My current energy level is: ${energy.toUpperCase()}
-          
-          Here are my pending tasks:
-          ${taskList}
-          
-          Pick the single best task for me to do right now given the time, day, my energy level and personal context. Reply with ONLY the task ID, nothing else.`,
+My current energy level is: ${energy.toUpperCase()}
+
+Here are my pending tasks:
+${taskList}
+
+Pick the single best task for me to do right now given the time, day, my energy level and personal context.
+
+Think through your reasoning briefly, then end your response with:
+PICK: [task id]`
         },
       ],
     }),
   });
 
   const data = await response.json();
-  const rawId = data.content?.[0]?.text?.trim();
 
   // Match the returned ID against known task IDs
-  const match = tasks.find(t => rawId?.includes(t.id));
-  return match?.id ?? tasks[0].id;
+  const text = data.content?.[0]?.text?.trim();
+  console.log('Claude reasoning:', text);
+  const pickMatch = text?.match(/^\s*\**\s*PICK\s*\**\s*:\s*(.+)$/im);
+  const rawId = pickMatch?.[1]?.trim();
+  const normalizedRawId = rawId
+    ?.replace(/[`*_]/g, '')
+    .replace(/^\[/, '')
+    .replace(/\]$/, '')
+    .replace(/^["']/, '')
+    .replace(/["']$/, '')
+    .trim();
+
+  const match =
+    tasks.find(t => String(t.id) === String(normalizedRawId)) ??
+    tasks.find(t => String(t.id).toLowerCase() === String(normalizedRawId).toLowerCase());
+
+  const pickLine = pickMatch?.[0];
+  console.log('Raw pick line:', pickLine);
+  console.log('Raw ID extracted:', JSON.stringify(rawId));
+  console.log('Normalized ID extracted:', JSON.stringify(normalizedRawId));
+  console.log('Available task IDs:', tasks.map(t => t.id));
+  if (!match) {
+    console.warn('Claude PICK did not match any known task id; falling back to oldest pending task');
+  }
+  return { id: match?.id ?? tasks[0].id, source: match ? 'claude' : 'fallback' };
 }

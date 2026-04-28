@@ -24,9 +24,9 @@ export function Home() {
   const handleEnergySelect = async (energy: "high" | "medium" | "low") => {
     setSelectedEnergy(energy);
     const pending = tasks.filter(t => t.status === 'pending');
-    navigate("/next", { state: { finding: true, energy } });
-    const pickedId = await pickNextTask(pending, energy);
-    setNextTask(pickedId);
+    const pick = await pickNextTask(pending, energy);
+    setNextTask(pick.id);
+    navigate("/next", { state: { finding: true, energy, pickSource: pick.source } });
   };
 
   const energyOptions = [
