@@ -6,7 +6,7 @@ import { pickNextTask } from "../../lib/claude";
 
 export function Home() {
   const navigate = useNavigate();
-  const { pendingCount, getWorkingTask, tasks, setNextTask } = useTaskContext();
+  const { pendingCount, getWorkingTask, tasks, setNextTask, setIsPickingNextTask } = useTaskContext();
   const workingTask = getWorkingTask();
   const [showEnergy, setShowEnergy] = useState(false);
   const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);
@@ -24,9 +24,15 @@ export function Home() {
   const handleEnergySelect = async (energy: "high" | "medium" | "low") => {
     setSelectedEnergy(energy);
     const pending = tasks.filter(t => t.status === 'pending');
-    const pick = await pickNextTask(pending, energy);
-    setNextTask(pick.id);
-    navigate("/next", { state: { finding: true, energy, pickSource: pick.source } });
+    setIsPickingNextTask(true);
+    navigate("/next", { state: { finding: true, energy } });
+    try {
+      const pick = await pickNextTask(pending, energy);
+      setNextTask(pick.id);
+      navigate("/next", { state: { finding: true, energy, pickSource: pick.source }, replace: true });
+    } finally {
+      setIsPickingNextTask(false);
+    }
   };
 
   const energyOptions = [
