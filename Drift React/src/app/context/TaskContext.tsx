@@ -32,6 +32,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       const { data, error } = await supabase
         .from('tasks')
         .select('*')
+        .in('status', ['pending', 'working', 'drifted'])
         .order('created_at', { ascending: true });
       if (!error && data) {
         setTasks(data.map(row => ({
@@ -63,7 +64,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
   const getNextTask = useCallback((): Task | null => {
     if (nextTaskId) {
-      return tasks.find(t => t.id === nextTaskId && t.status === 'pending') ?? null;
+      return tasks.find(t => String(t.id) === String(nextTaskId) && t.status === 'pending') ?? null;
     }
     const pending = tasks
       .filter(t => t.status === 'pending')

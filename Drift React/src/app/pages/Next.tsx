@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaskContext } from '../context/TaskContext';
 import { useState, useEffect } from 'react';
-import { pickNextTask } from '../../lib/claude';
+import { pickNextTask, type PickSource } from '../../lib/claude';
 
 type Phase = 'finding' | 'revealing' | 'ready';
 
@@ -13,6 +13,7 @@ export function Next() {
   const [exiting, setExiting] = useState<string | null>(null);
 
   const fromEnergySelect = !!(location.state as any)?.finding;
+  const [pickSource, setPickSource] = useState<PickSource | null>(((location.state as any)?.pickSource as PickSource | undefined) ?? null);
   const [phase, setPhase] = useState<Phase>(fromEnergySelect ? 'finding' : 'ready');
   const [visible, setVisible] = useState(!fromEnergySelect);
   
@@ -53,8 +54,9 @@ export function Next() {
       if (energy) {
         const pending = tasks
           .filter(t => t.status === 'pending' && t.id !== displayTask.id);
-        const pickedId = await pickNextTask(pending, energy);
-        setNextTask(pickedId);
+        const pick = await pickNextTask(pending, energy);
+        setNextTask(pick.id);
+        setPickSource(pick.source);
         setExiting(null);
         setPhase('finding');
         setTimeout(() => setPhase('revealing'), 1100);
@@ -211,6 +213,17 @@ export function Next() {
               >
                 {workingTask ? 'in progress' : 'up next'}
               </motion.p>
+              {!workingTask && pickSource === 'fallback' && (
+                <motion.p
+                  className="text-[#6b5a2a] mb-3"
+                  style={{ fontSize: '12px' }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: 0.08 }}
+                >
+                  Claude pick was unclear, showing oldest pending task.
+                </motion.p>
+              )}
               <motion.p
                 className="text-white"
                 style={{ fontSize: '26px', fontWeight: 300, letterSpacing: '-0.01em', lineHeight: 1.4 }}
