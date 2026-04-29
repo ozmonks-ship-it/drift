@@ -246,29 +246,64 @@ export function Next() {
                 {displayTask.description}
               </motion.p>
               {!workingTask && phase === 'ready' && pickReasoning && (
-                <button
-                  type="button"
-                  onClick={() => setShowWhy(v => !v)}
-                  className="text-[#8a7a4a] hover:text-[#b3a070] underline underline-offset-4 text-left mt-4"
-                  style={{ fontSize: '12px', opacity: 0.9 }}
-                >
-                  Why?
-                </button>
-              )}
-              <AnimatePresence>
-                {showWhy && pickReasoning && !workingTask && phase === 'ready' && (
+                <>
+                  {/* Why button */}
                   <motion.div
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6 }}
-                    transition={{ duration: 0.2 }}
-                    className="text-[#7a7a7a] mb-4"
-                    style={{ fontSize: '13px', whiteSpace: 'pre-wrap' }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4, delay: 0.25 }}
+                    className="mt-6"
                   >
-                    {pickReasoning}
+                    <button
+                      onClick={() => setShowWhy(v => !v)}
+                      className="transition-colors"
+                      style={{
+                        fontSize: '12px',
+                        letterSpacing: '0.12em',
+                        color: showWhy ? '#555' : '#333',
+                      }}
+                    >
+                      {showWhy ? 'close ×' : 'why this? ↓'}
+                    </button>
+
+                    <AnimatePresence>
+                      {showWhy && (
+                        <motion.div
+                          key="why-panel"
+                          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                          animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+                          exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                          style={{ overflow: 'hidden' }}
+                        >
+                          <div
+                            className="rounded-2xl p-5 border border-[#1e1e1e]"
+                            style={{ background: '#0f0f0f' }}
+                          >
+                            <p
+                              className="text-[#2e2e2e] tracking-[0.2em] uppercase mb-3"
+                              style={{ fontSize: '10px' }}
+                            >
+                              claude's reasoning
+                            </p>
+                            <p
+                              className="text-[#4a4a4a]"
+                              style={{
+                                fontSize: '14px',
+                                fontWeight: 300,
+                                lineHeight: 1.6,
+                                whiteSpace: 'pre-wrap',
+                              }}
+                            >
+                              {pickReasoning}
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
-                )}
-              </AnimatePresence>
+                </>
+              )}
             </motion.div>
           </motion.div>
         )}
