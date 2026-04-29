@@ -29,7 +29,7 @@ export function Home() {
     try {
       const pick = await pickNextTask(pending, energy);
       setNextTask(pick.id);
-      navigate("/next", { state: { finding: true, energy, pickSource: pick.source }, replace: true });
+      navigate("/next", { state: { finding: true, energy, pickSource: pick.source, pickReasoning: pick.reasoning }, replace: true });
     } finally {
       setIsPickingNextTask(false);
     }

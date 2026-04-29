@@ -17,7 +17,7 @@ LIFE PRIORITIES (in order):
 
 WEEKLY RHYTHM:
 - Daycare days (Mon, Tue, Wed): swim/surf → coffee + reading → cooking + cleaning → product work → guitar
-- Non-daycare days (Mon, Thu, Sat, Sun): pilates → family time → guitar
+- Non-daycare days (Thu, Fri, Sat, Sun): pilates → family time → guitar
 - Thursday evenings: date night, order in
 
 WORKING STYLE:
@@ -36,14 +36,15 @@ export type PickSource = 'claude' | 'fallback' | 'single' | 'empty';
 export interface PickResult {
   id: string | null;
   source: PickSource;
+  reasoning: string | null;
 }
 
 export async function pickNextTask(
   tasks: { id: string; description: string }[],
   energy: 'high' | 'medium' | 'low'
 ): Promise<PickResult> {
-  if (tasks.length === 0) return { id: null, source: 'empty' };
-  if (tasks.length === 1) return { id: tasks[0].id, source: 'single' };
+  if (tasks.length === 0) return { id: null, source: 'empty', reasoning: null };
+  if (tasks.length === 1) return { id: tasks[0].id, source: 'single', reasoning: null };
 
   const taskList = tasks
   .map(t => `[${t.id}] ${t.description}`)
@@ -106,5 +107,6 @@ PICK: [task id]`
   if (!match) {
     console.warn('Claude PICK did not match any known task id; falling back to oldest pending task');
   }
-  return { id: match?.id ?? tasks[0].id, source: match ? 'claude' : 'fallback' };
+  const reasoning = text ? text.replace(pickLine ?? '', '').trim() : null;
+  return { id: match?.id ?? tasks[0].id, source: match ? 'claude' : 'fallback', reasoning };
 }
