@@ -14,8 +14,16 @@ export function Next() {
 
   const fromEnergySelect = !!(location.state as any)?.finding;
   const [pickSource, setPickSource] = useState<PickSource | null>(((location.state as any)?.pickSource as PickSource | undefined) ?? null);
+  const [pickReasoning, setPickReasoning] = useState<string | null>(((location.state as any)?.pickReasoning as string | undefined) ?? null);
   const [phase, setPhase] = useState<Phase>(fromEnergySelect && isPickingNextTask ? 'finding' : 'ready');
   const [visible, setVisible] = useState(!fromEnergySelect);
+  const [showWhy, setShowWhy] = useState(false);
+
+  useEffect(() => {
+    const state = (location.state as any) ?? {};
+    if ('pickSource' in state) setPickSource((state.pickSource as PickSource | undefined) ?? null);
+    if ('pickReasoning' in state) setPickReasoning((state.pickReasoning as string | undefined) ?? null);
+  }, [location.state]);
   
   useEffect(() => {
     if (fromEnergySelect) {
@@ -31,6 +39,10 @@ export function Next() {
   useEffect(() => {
     setPhase(isPickingNextTask ? 'finding' : 'ready');
   }, [isPickingNextTask]);
+
+  useEffect(() => {
+    setShowWhy(false);
+  }, [displayTask?.id]);
 
   const handleStart = async () => {
     if (!displayTask) return;
@@ -55,6 +67,7 @@ export function Next() {
           const pick = await pickNextTask(pending, energy);
           setNextTask(pick.id);
           setPickSource(pick.source);
+          setPickReasoning(pick.reasoning);
           setExiting(null);
         } finally {
           setIsPickingNextTask(false);
@@ -232,6 +245,30 @@ export function Next() {
               >
                 {displayTask.description}
               </motion.p>
+              {!workingTask && phase === 'ready' && pickReasoning && (
+                <button
+                  type="button"
+                  onClick={() => setShowWhy(v => !v)}
+                  className="text-[#8a7a4a] hover:text-[#b3a070] underline underline-offset-4 text-left mt-4"
+                  style={{ fontSize: '12px', opacity: 0.9 }}
+                >
+                  Why?
+                </button>
+              )}
+              <AnimatePresence>
+                {showWhy && pickReasoning && !workingTask && phase === 'ready' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-[#7a7a7a] mb-4"
+                    style={{ fontSize: '13px', whiteSpace: 'pre-wrap' }}
+                  >
+                    {pickReasoning}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           </motion.div>
         )}
