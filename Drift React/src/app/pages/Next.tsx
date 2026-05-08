@@ -9,7 +9,7 @@ type Phase = 'finding' | 'revealing' | 'ready';
 export function Next() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { getNextTask, getWorkingTask, startTask, driftTask, binTask, tasks, setNextTask, isPickingNextTask, setIsPickingNextTask } = useTaskContext();
+  const { getNextTask, getWorkingTask, startTask, driftTask, binTask, tasks, setNextTask, isPickingNextTask, setIsPickingNextTask, sessionDriftedTasks, addSessionDriftedTask } = useTaskContext();
   const [exiting, setExiting] = useState<string | null>(null);
 
   const fromEnergySelect = !!(location.state as any)?.finding;
@@ -64,7 +64,8 @@ export function Next() {
         const pending = tasks
           .filter(t => t.status === 'pending' && t.id !== displayTask.id);
         try {
-          const pick = await pickNextTask(pending, energy);
+          addSessionDriftedTask(displayTask.description);
+          const pick = await pickNextTask(pending, energy, [...sessionDriftedTasks, displayTask.description]);
           setNextTask(pick.id);
           setPickSource(pick.source);
           setPickReasoning(pick.reasoning);
