@@ -234,7 +234,7 @@ export function Next() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3, delay: 0.08 }}
                 >
-                  Claude pick was unclear, showing oldest pending task.
+                  Going with the flow on this one.
                 </motion.p>
               )}
               <motion.p
