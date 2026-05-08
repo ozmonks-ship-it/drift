@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router';
 import { TaskProvider } from '../context/TaskContext';
+import { InstallPrompt } from './InstallPrompt';
 
 export function Root() {
   return (
@@ -10,6 +11,7 @@ export function Root() {
       >
         <div className="w-full max-w-[420px] min-h-[100dvh] relative">
           <Outlet />
+          <InstallPrompt />
         </div>
       </div>
     </TaskProvider>
