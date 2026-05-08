@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { useTaskContext } from "../context/TaskContext";
-import { useState } from "react";
+import React, { useState } from "react";
 import { pickNextTask } from "../../lib/claude";
 
 export function Home() {
   const navigate = useNavigate();
-  const { pendingCount, getWorkingTask, tasks, setNextTask, setIsPickingNextTask } = useTaskContext();
+  const { pendingCount, getWorkingTask, tasks, setNextTask, setIsPickingNextTask, clearSessionDriftedTasks, isLoadingTasks } = useTaskContext();
   const workingTask = getWorkingTask();
   const [showEnergy, setShowEnergy] = useState(false);
   const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);
@@ -17,6 +17,7 @@ export function Home() {
     if (workingTask) {
       navigate("/working");
     } else {
+      clearSessionDriftedTasks();
       setShowEnergy(true);
     }
   };
@@ -42,21 +43,60 @@ export function Home() {
   ];
 
   return (
-    <motion.div
-      className="flex flex-col min-h-[100dvh] px-8 py-12"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: selectedEnergy ? 0 : 1 }}
-      transition={{ duration: 0.3, delay: selectedEnergy ? 0.18 : 0 }}
-    >
+    <AnimatePresence mode="wait">
+      {isLoadingTasks ? (
+        <motion.div
+          key="loader"
+          className="flex flex-col min-h-[100dvh] items-center justify-center gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, scale: 0.97 }}
+          transition={{ duration: 0.3 }}
+        >
+          {/* Three-dot breathing loader */}
+          <div className="flex items-center gap-[7px]">
+            {[0, 1, 2].map((i) => (
+              <motion.span
+                key={i}
+                className="block rounded-full bg-[#2e2e2e]"
+                style={{ width: 5, height: 5 }}
+                animate={{ opacity: [0.2, 0.8, 0.2], y: [0, -4, 0] }}
+                transition={{
+                  duration: 1.1,
+                  delay: i * 0.18,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </div>
+          <motion.p
+            className="text-[#252525] tracking-[0.25em] uppercase"
+            style={{ fontSize: "10px" }}
+            animate={{ opacity: [0.4, 0.7, 0.4] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          >
+            loading
+          </motion.p>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="home"
+          className="flex flex-col min-h-[100dvh] px-8 py-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: selectedEnergy ? 0 : 1 }}
+          transition={{ duration: 0.3, delay: selectedEnergy ? 0.18 : 0 }}
+        >
       {showEnergy && (
-      <button
-        onClick={() => setShowEnergy(false)}
-        className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
-        style={{ fontSize: '13px', letterSpacing: '0.05em' }}
-      >
-        ← back
-      </button>
-    )}
+        <button
+          onClick={() => setShowEnergy(false)}
+          className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
+          style={{ fontSize: '13px', letterSpacing: '0.05em' }}
+        >
+          ← back
+        </button>
+      )}
+
       {/* Logo / Hero */}
       <div className="flex-1 flex flex-col justify-center">
         <motion.div
@@ -143,8 +183,7 @@ export function Home() {
               <div className="flex flex-col gap-3">
                 {energyOptions.map((option, i) => {
                   const isSelected = selectedEnergy === option.value;
-                  const otherSelected =
-                    selectedEnergy !== null && !isSelected;
+                  const otherSelected = selectedEnergy !== null && !isSelected;
 
                   return (
                     <motion.button
@@ -223,5 +262,7 @@ export function Home() {
         </motion.div>
       )}
     </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

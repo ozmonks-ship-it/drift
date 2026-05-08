@@ -10,6 +10,7 @@ export interface Task {
 
 interface TaskContextType {
   tasks: Task[];
+  isLoadingTasks: boolean;
   addTask: (description: string) => void;
   getNextTask: () => Task | null;
   startTask: (id: string) => void;
@@ -21,29 +22,38 @@ interface TaskContextType {
   setNextTask: (id: string | null) => void;
   isPickingNextTask: boolean;
   setIsPickingNextTask: (isPicking: boolean) => void;
+  sessionDriftedTasks: string[];
+    addSessionDriftedTask: (description: string) => void;
+    clearSessionDriftedTasks: () => void;
 }
 
 const TaskContext = createContext<TaskContextType | null>(null);
 
 export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [isLoadingTasks, setIsLoadingTasks] = useState(true);
   const [nextTaskId, setNextTaskId] = useState<string | null>(null);
+  const [sessionDriftedTasks, setSessionDriftedTasks] = useState<string[]>([]);
   const [isPickingNextTask, setIsPickingNextTask] = useState(false);
 
   useEffect(() => {
     async function fetchTasks() {
-      const { data, error } = await supabase
-        .from('tasks')
-        .select('*')
-        .in('status', ['pending', 'working', 'drifted'])
-        .order('created_at', { ascending: true });
-      if (!error && data) {
-        setTasks(data.map(row => ({
-          id: row.id,
-          description: row.title,
-          status: row.status,
-          createdAt: new Date(row.created_at).getTime(),
-        })));
+      try {
+        const { data, error } = await supabase
+          .from('tasks')
+          .select('*')
+          .in('status', ['pending', 'working', 'drifted'])
+          .order('created_at', { ascending: true });
+        if (!error && data) {
+          setTasks(data.map(row => ({
+            id: row.id,
+            description: row.title,
+            status: row.status,
+            createdAt: new Date(row.created_at).getTime(),
+          })));
+        }
+      } finally {
+        setIsLoadingTasks(false);
       }
     }
     fetchTasks();
@@ -112,6 +122,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   return (
     <TaskContext.Provider value={{
       tasks,
+      isLoadingTasks,
       addTask,
       getNextTask,
       startTask,
@@ -123,6 +134,10 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       setNextTask: setNextTaskId,
       isPickingNextTask,
       setIsPickingNextTask,
+      sessionDriftedTasks,
+        addSessionDriftedTask: (description: string) => 
+          setSessionDriftedTasks(prev => [...prev, description]),
+        clearSessionDriftedTasks: () => setSessionDriftedTasks([]),
     }}>
       {children}
     </TaskContext.Provider>

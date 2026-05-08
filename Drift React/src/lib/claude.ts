@@ -41,14 +41,19 @@ export interface PickResult {
 
 export async function pickNextTask(
   tasks: { id: string; description: string }[],
-  energy: 'high' | 'medium' | 'low'
+  energy: 'high' | 'medium' | 'low',
+  driftedTasks?: string[]
 ): Promise<PickResult> {
   if (tasks.length === 0) return { id: null, source: 'empty', reasoning: null };
   if (tasks.length === 1) return { id: tasks[0].id, source: 'single', reasoning: null };
 
   const taskList = tasks
-  .map(t => `[${t.id}] ${t.description}`)
-  .join('\n');
+    .map(t => `[${t.id}] ${t.description}`)
+    .join('\n');
+
+  const driftedContext = driftedTasks && driftedTasks.length > 0
+    ? `\nI don't want to tackle these right now:\n${driftedTasks.map(d => `- "${d}"`).join('\n')}\n`
+    : '';
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -67,7 +72,7 @@ export async function pickNextTask(
           role: 'user',
           content: `The current time is ${new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true })} on ${new Date().toLocaleDateString('en-AU', { weekday: 'long' })}.
 My current energy level is: ${energy.toUpperCase()}
-
+${driftedContext}
 Here are my pending tasks:
 ${taskList}
 
@@ -82,7 +87,6 @@ PICK: [task id]`
 
   const data = await response.json();
 
-  // Match the returned ID against known task IDs
   const text = data.content?.[0]?.text?.trim();
   console.log('Claude reasoning:', text);
   const pickMatch = text?.match(/^\s*\**\s*PICK\s*\**\s*:\s*(.+)$/im);
