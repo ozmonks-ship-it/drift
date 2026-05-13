@@ -52,9 +52,9 @@ export function Next() {
 
   const handleDrift = () => {
     if (!displayTask) return;
-    setExiting('drift');
-    setIsPickingNextTask(true);
     setPhase('finding');
+    setIsPickingNextTask(true);
+    setExiting('drift');
     setTimeout(async () => {
       // End exit animation so the finding state can be visible while Claude is in-flight.
       setExiting(null);
@@ -310,17 +310,24 @@ export function Next() {
         )}
       </AnimatePresence>
 
-      {/* Actions */}
-<motion.div
-  className="flex flex-col gap-3"
-  initial={{ opacity: 0, y: 16 }}
-  animate={{
-    opacity: phase === 'ready' ? 1 : 0,
-    y: phase === 'ready' ? 0 : 16,
-  }}
-  style={{ pointerEvents: phase === 'ready' ? 'auto' : 'none' }}
-  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
->
+      {/* Actions — hide instantly when not ready so layout reflow (task unmount) cannot flash visible buttons */}
+      <motion.div
+        className="flex flex-col gap-3"
+        initial={{ opacity: 0, y: 16 }}
+        animate={{
+          opacity: phase === 'ready' ? 1 : 0,
+          y: phase === 'ready' ? 0 : 16,
+        }}
+        style={{
+          pointerEvents: phase === 'ready' ? 'auto' : 'none',
+          visibility: phase === 'ready' ? 'visible' : 'hidden',
+        }}
+        transition={
+          phase === 'ready'
+            ? { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
+            : { duration: 0 }
+        }
+      >
             <button
               onClick={handleStart}
               className="w-full rounded-2xl py-5 px-6 transition-all duration-200 hover:opacity-90"
