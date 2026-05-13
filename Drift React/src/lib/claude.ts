@@ -25,11 +25,12 @@ WORKING STYLE:
 - Easily distracted, gets overwhelmed by long lists
 - Needs help saying no and cutting scope
 
-ENERGY MAPPING:
-- High energy → important, meaningful tasks that move life or product forward
-- Medium energy → steady tasks, family admin, reading
-- Low energy → quick wins, easy tasks, light admin
+MODE CALIBRATION (user-selected per pick):
+- DEEP — time and focus for meaningful tasks that move priorities forward
+- QUICK — fast win: prefer shorter, easier tasks when priorities allow
 `;
+
+export type PickUserMode = 'deep' | 'quick';
 
 export type PickSource = 'claude' | 'fallback' | 'single' | 'empty';
 
@@ -41,7 +42,7 @@ export interface PickResult {
 
 export async function pickNextTask(
   tasks: { id: string; description: string }[],
-  energy: 'high' | 'medium' | 'low',
+  mode: PickUserMode,
   driftedTasks?: string[]
 ): Promise<PickResult> {
   if (tasks.length === 0) return { id: null, source: 'empty', reasoning: null };
@@ -71,12 +72,12 @@ export async function pickNextTask(
         {
           role: 'user',
           content: `The current time is ${new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true })} on ${new Date().toLocaleDateString('en-AU', { weekday: 'long' })}.
-My current energy level is: ${energy.toUpperCase()}
+The user's mode is: ${mode === 'deep' ? 'DEEP' : 'QUICK'}. IMPORTANT: Always respect life priorities first — family tasks must never be skipped regardless of mode. Use mode only to calibrate effort: DEEP means the user has time and focus for meaningful tasks. QUICK means the user wants a fast win — prefer shorter, easier tasks but still respect priority order.
 ${driftedContext}
 Here are my pending tasks:
 ${taskList}
 
-Pick the single best task for me to do right now given the time, day, my energy level and personal context.
+Pick the single best task for me to do right now given the time, day, my mode and personal context.
 
 Think through your reasoning briefly, then end your response with:
 PICK: [task id]`

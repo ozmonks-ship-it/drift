@@ -2,14 +2,14 @@ import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { useTaskContext } from "../context/TaskContext";
 import React, { useState } from "react";
-import { pickNextTask } from "../../lib/claude";
+import { pickNextTask, type PickUserMode } from "../../lib/claude";
 
 export function Home() {
   const navigate = useNavigate();
   const { pendingCount, getWorkingTask, tasks, setNextTask, setIsPickingNextTask, clearSessionDriftedTasks, isLoadingTasks } = useTaskContext();
   const workingTask = getWorkingTask();
-  const [showEnergy, setShowEnergy] = useState(false);
-  const [selectedEnergy, setSelectedEnergy] = useState<string | null>(null);
+  const [showMode, setShowMode] = useState(false);
+  const [selectedMode, setSelectedMode] = useState<PickUserMode | null>(null);
 
   const hasAnything = pendingCount > 0 || !!workingTask;
 
@@ -18,28 +18,27 @@ export function Home() {
       navigate("/working");
     } else {
       clearSessionDriftedTasks();
-      setShowEnergy(true);
+      setShowMode(true);
     }
   };
 
-  const handleEnergySelect = async (energy: "high" | "medium" | "low") => {
-    setSelectedEnergy(energy);
+  const handleModeSelect = async (mode: PickUserMode) => {
+    setSelectedMode(mode);
     const pending = tasks.filter(t => t.status === 'pending');
     setIsPickingNextTask(true);
-    navigate("/next", { state: { finding: true, energy } });
+    navigate("/next", { state: { finding: true, mode } });
     try {
-      const pick = await pickNextTask(pending, energy);
+      const pick = await pickNextTask(pending, mode);
       setNextTask(pick.id);
-      navigate("/next", { state: { finding: true, energy, pickSource: pick.source, pickReasoning: pick.reasoning }, replace: true });
+      navigate("/next", { state: { finding: true, mode, pickSource: pick.source, pickReasoning: pick.reasoning }, replace: true });
     } finally {
       setIsPickingNextTask(false);
     }
   };
 
-  const energyOptions = [
-    { label: "🔋 High", value: "high" as const },
-    { label: "🔆 Medium", value: "medium" as const },
-    { label: "🪫 Low", value: "low" as const },
+  const modeOptions: { label: string; value: PickUserMode }[] = [
+    { label: "☀️ Let's go", value: "deep" },
+    { label: "⚡ Quick one", value: "quick" },
   ];
 
   return (
@@ -84,12 +83,12 @@ export function Home() {
           key="home"
           className="flex flex-col min-h-[100dvh] px-8 py-12"
           initial={{ opacity: 0 }}
-          animate={{ opacity: selectedEnergy ? 0 : 1 }}
-          transition={{ duration: 0.3, delay: selectedEnergy ? 0.18 : 0 }}
+          animate={{ opacity: selectedMode ? 0 : 1 }}
+          transition={{ duration: 0.3, delay: selectedMode ? 0.18 : 0 }}
         >
-      {showEnergy && (
+      {showMode && (
         <button
-          onClick={() => setShowEnergy(false)}
+          onClick={() => setShowMode(false)}
           className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
           style={{ fontSize: '13px', letterSpacing: '0.05em' }}
         >
@@ -164,9 +163,9 @@ export function Home() {
           )}
         </motion.div>
 
-        {/* Energy selector */}
+        {/* Mode selector */}
         <AnimatePresence>
-          {showEnergy && (
+          {showMode && (
             <motion.div
               className="mt-10"
               initial={{ opacity: 0, y: 12 }}
@@ -178,18 +177,18 @@ export function Home() {
                 className="text-[#3a3a3a] mb-5 tracking-[0.2em] uppercase"
                 style={{ fontSize: "11px" }}
               >
-                How's your energy?
+                Pick your pace
               </p>
               <div className="flex flex-col gap-3">
-                {energyOptions.map((option, i) => {
-                  const isSelected = selectedEnergy === option.value;
-                  const otherSelected = selectedEnergy !== null && !isSelected;
+                {modeOptions.map((option, i) => {
+                  const isSelected = selectedMode === option.value;
+                  const otherSelected = selectedMode !== null && !isSelected;
 
                   return (
                     <motion.button
                       key={option.value}
-                      onClick={() => handleEnergySelect(option.value)}
-                      disabled={selectedEnergy !== null}
+                      onClick={() => handleModeSelect(option.value)}
+                      disabled={selectedMode !== null}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{
                         opacity: otherSelected ? 0 : 1,
@@ -222,7 +221,7 @@ export function Home() {
       </div>
 
       {/* Actions */}
-      {!showEnergy && (
+      {!showMode && (
         <motion.div
           className="flex flex-col gap-3"
           initial={{ opacity: 0, y: 16 }}
