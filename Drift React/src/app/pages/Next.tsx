@@ -2,9 +2,31 @@ import { useNavigate, useLocation } from 'react-router';
 import { motion, AnimatePresence } from 'motion/react';
 import { useTaskContext } from '../context/TaskContext';
 import { useState, useEffect } from 'react';
-import { pickNextTask, type PickSource } from '../../lib/claude';
+import { pickNextTask, type PickSource, type PickUserMode } from '../../lib/claude';
 
 type Phase = 'finding' | 'revealing' | 'ready';
+
+function isPickUserMode(v: unknown): v is PickUserMode {
+  return v === 'deep' || v === 'quick';
+}
+
+/** Resolves pick mode from router state; supports legacy `energy` for in-flight sessions. */
+function pickModeFromLocationState(state: unknown): PickUserMode | null {
+  if (!state || typeof state !== 'object') return null;
+  const s = state as Record<string, unknown>;
+  if (isPickUserMode(s.mode)) return s.mode;
+  const e = s.energy;
+  if (e === 'low') return 'quick';
+  if (e === 'high' || e === 'medium') return 'deep';
+  return null;
+}
+
+export type NextPickLocationState = {
+  finding?: boolean;
+  mode?: PickUserMode;
+  pickSource?: PickSource;
+  pickReasoning?: string | null;
+};
 
 export function Next() {
   const navigate = useNavigate();
@@ -12,25 +34,26 @@ export function Next() {
   const { getNextTask, getWorkingTask, startTask, driftTask, binTask, tasks, setNextTask, isPickingNextTask, setIsPickingNextTask, sessionDriftedTasks, addSessionDriftedTask } = useTaskContext();
   const [exiting, setExiting] = useState<string | null>(null);
 
-  const fromEnergySelect = !!(location.state as any)?.finding;
-  const [pickSource, setPickSource] = useState<PickSource | null>(((location.state as any)?.pickSource as PickSource | undefined) ?? null);
-  const [pickReasoning, setPickReasoning] = useState<string | null>(((location.state as any)?.pickReasoning as string | undefined) ?? null);
-  const [phase, setPhase] = useState<Phase>(fromEnergySelect && isPickingNextTask ? 'finding' : 'ready');
-  const [visible, setVisible] = useState(!fromEnergySelect);
+  const navState = (location.state as NextPickLocationState | null) ?? {};
+  const fromModeSelect = !!navState.finding;
+  const [pickSource, setPickSource] = useState<PickSource | null>(navState.pickSource ?? null);
+  const [pickReasoning, setPickReasoning] = useState<string | null>(navState.pickReasoning ?? null);
+  const [phase, setPhase] = useState<Phase>(fromModeSelect && isPickingNextTask ? 'finding' : 'ready');
+  const [visible, setVisible] = useState(!fromModeSelect);
   const [showWhy, setShowWhy] = useState(false);
 
   useEffect(() => {
-    const state = (location.state as any) ?? {};
-    if ('pickSource' in state) setPickSource((state.pickSource as PickSource | undefined) ?? null);
-    if ('pickReasoning' in state) setPickReasoning((state.pickReasoning as string | undefined) ?? null);
+    const state = (location.state as NextPickLocationState | null) ?? {};
+    if ('pickSource' in state) setPickSource(state.pickSource ?? null);
+    if ('pickReasoning' in state) setPickReasoning(state.pickReasoning ?? null);
   }, [location.state]);
   
   useEffect(() => {
-    if (fromEnergySelect) {
+    if (fromModeSelect) {
       const t = setTimeout(() => setVisible(true), 50);
       return () => clearTimeout(t);
     }
-  }, [fromEnergySelect]);
+  }, [fromModeSelect]);
 
   const nextTask = getNextTask();
   const workingTask = getWorkingTask();
@@ -59,13 +82,13 @@ export function Next() {
       // End exit animation so the finding state can be visible while Claude is in-flight.
       setExiting(null);
       await driftTask(displayTask.id);
-      const energy = (location.state as any)?.energy;
-      if (energy) {
+      const mode = pickModeFromLocationState(location.state);
+      if (mode) {
         const pending = tasks
           .filter(t => t.status === 'pending' && t.id !== displayTask.id);
         try {
           addSessionDriftedTask(displayTask.description);
-          const pick = await pickNextTask(pending, energy, [...sessionDriftedTasks, displayTask.description]);
+          const pick = await pickNextTask(pending, mode, [...sessionDriftedTasks, displayTask.description]);
           setNextTask(pick.id);
           setPickSource(pick.source);
           setPickReasoning(pick.reasoning);
@@ -129,12 +152,12 @@ export function Next() {
   return (
     <motion.div
       className="flex flex-col min-h-[100dvh] px-8 py-12 overflow-hidden"
-      initial={{ opacity: fromEnergySelect ? 0 : 0, x: fromEnergySelect ? 0 : 24 }}
+      initial={{ opacity: fromModeSelect ? 0 : 0, x: fromModeSelect ? 0 : 24 }}
       animate={{
         opacity: exiting ? 0 : 1,
         x: exiting === 'drift' ? -24 : exiting === 'bin' ? 24 : 0,
       }}
-      transition={{ duration: fromEnergySelect ? 0.25 : 0.3 }}
+      transition={{ duration: fromModeSelect ? 0.25 : 0.3 }}
     >
       {/* Back — hidden during finding phase */}
       <AnimatePresence>

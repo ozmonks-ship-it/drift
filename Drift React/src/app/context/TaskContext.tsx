@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../lib/supabase';
 
+export type { PickUserMode } from '../../lib/claude';
+
 export interface Task {
   id: string;
   description: string;
