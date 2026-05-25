@@ -117,6 +117,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   const completeTask = useCallback(async (id: string) => {
     await supabase.from('tasks').update({ status: 'completed' }).eq('id', id);
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'completed' } : t));
+    setNextTaskId(prev => (prev === id ? null : prev));
   }, []);
 
   const pendingCount = tasks.filter(t => t.status === 'pending').length;

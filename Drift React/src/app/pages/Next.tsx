@@ -112,7 +112,7 @@ export function Next() {
     }, 300);
   };
 
-  if (!displayTask) {
+  if (!displayTask && !isPickingNextTask) {
     return (
       <motion.div
         className="flex flex-col min-h-[100dvh] px-8 py-12"
