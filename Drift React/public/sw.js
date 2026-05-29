@@ -1,4 +1,4 @@
-const CACHE_NAME = 'solm-v2';
+const CACHE_NAME = 'solm-v3';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
