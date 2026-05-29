@@ -1,10 +1,7 @@
-import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
-import { SolmLogo } from '../../components/SolmLogo';
+import { SolmLogo } from '../components/SolmLogo';
 
 export function OnboardingWelcome() {
-  const navigate = useNavigate();
-
   return (
     <motion.div
       className="flex flex-col min-h-[100dvh] px-8 py-12"
@@ -12,6 +9,7 @@ export function OnboardingWelcome() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
+      {/* Hero */}
       <div className="flex-1 flex flex-col justify-center">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
@@ -33,6 +31,7 @@ export function OnboardingWelcome() {
         </motion.div>
       </div>
 
+      {/* Actions */}
       <motion.div
         className="flex flex-col gap-4"
         initial={{ opacity: 0, y: 16 }}
@@ -40,8 +39,6 @@ export function OnboardingWelcome() {
         transition={{ duration: 0.5, delay: 0.25 }}
       >
         <button
-          type="button"
-          onClick={() => navigate('/onboarding/priorities')}
           className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-opacity active:opacity-80"
           style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
         >

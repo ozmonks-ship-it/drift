@@ -1,24 +1,11 @@
-import { useState, useEffect } from 'react';
-import { flushSync } from 'react-dom';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { useOnboardingContext } from '../../context/OnboardingContext';
-import { upsertUserContext } from '../../../lib/userContext';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export function OnboardingSchedule() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const fromSettings = searchParams.get('from') === 'settings';
-  const { draft, setSchedule, toUserContextInput } = useOnboardingContext();
-  const [activeDays, setActiveDays] = useState<string[]>(draft.focusDays);
-  const [notes, setNotes] = useState(draft.freeText);
-
-  useEffect(() => {
-    setActiveDays(draft.focusDays);
-    setNotes(draft.freeText);
-  }, [draft.focusDays, draft.freeText]);
+  const [activeDays, setActiveDays] = useState<string[]>([]);
+  const [notes, setNotes] = useState('');
 
   const toggleDay = (day: string) =>
     setActiveDays((prev) =>
@@ -27,26 +14,6 @@ export function OnboardingSchedule() {
 
   const canProceed = activeDays.length > 0;
 
-  const handleNext = async () => {
-    flushSync(() => setSchedule(activeDays, notes));
-    if (fromSettings) {
-      const { error } = await upsertUserContext(
-        toUserContextInput({ focusDays: activeDays, freeText: notes })
-      );
-      if (!error) navigate('/settings');
-      return;
-    }
-    navigate('/onboarding/complete');
-  };
-
-  const handleBack = () => {
-    if (fromSettings) {
-      navigate('/settings');
-      return;
-    }
-    navigate('/onboarding/rhythm');
-  };
-
   return (
     <motion.div
       className="flex flex-col min-h-[100dvh] px-8 py-12"
@@ -54,24 +21,23 @@ export function OnboardingSchedule() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.35 }}
     >
+      {/* Back */}
       <button
-        type="button"
-        onClick={handleBack}
         className="self-start mb-10 transition-colors"
         style={{ fontSize: '13px', letterSpacing: '0.05em', color: '#444' }}
       >
         ← back
       </button>
 
-      {!fromSettings && (
-        <p
-          className="tracking-[0.25em] uppercase mb-8"
-          style={{ fontSize: '11px', color: '#2e2e2e' }}
-        >
-          3 of 4
-        </p>
-      )}
+      {/* Step indicator */}
+      <p
+        className="tracking-[0.25em] uppercase mb-8"
+        style={{ fontSize: '11px', color: '#2e2e2e' }}
+      >
+        3 of 4
+      </p>
 
+      {/* Question */}
       <h2
         className="text-white mb-10"
         style={{ fontSize: '26px', fontWeight: 300, letterSpacing: '-0.02em', lineHeight: 1.3 }}
@@ -80,6 +46,7 @@ export function OnboardingSchedule() {
       </h2>
 
       <div className="flex-1 flex flex-col gap-10">
+        {/* Day selector */}
         <div>
           <p
             className="tracking-[0.2em] uppercase mb-5"
@@ -93,7 +60,6 @@ export function OnboardingSchedule() {
               return (
                 <button
                   key={day}
-                  type="button"
                   onClick={() => toggleDay(day)}
                   className="rounded-2xl border transition-all duration-200"
                   style={{
@@ -113,6 +79,7 @@ export function OnboardingSchedule() {
           </div>
         </div>
 
+        {/* Free text */}
         <div>
           <p
             className="tracking-[0.2em] uppercase mb-4"
@@ -137,15 +104,14 @@ export function OnboardingSchedule() {
         </div>
       </div>
 
+      {/* Next */}
       <div className="mt-8">
         <button
-          type="button"
           disabled={!canProceed}
-          onClick={handleNext}
           className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed"
           style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
         >
-          <span>{fromSettings ? 'Save' : 'Next'}</span>
+          <span>Next</span>
           <span>→</span>
         </button>
       </div>

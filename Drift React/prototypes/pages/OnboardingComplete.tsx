@@ -1,39 +1,6 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
-import { useOnboardingContext } from '../../context/OnboardingContext';
-import { upsertUserContext } from '../../../lib/userContext';
 
 export function OnboardingComplete() {
-  const navigate = useNavigate();
-  const { draft, toUserContextInput } = useOnboardingContext();
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
-
-  const handleStart = async () => {
-    setSaveError(null);
-    setIsSaving(true);
-    const { data, error } = await upsertUserContext(toUserContextInput());
-    setIsSaving(false);
-
-    if (error || !data) {
-      setSaveError(
-        error ??
-          'Could not save your profile. Make sure the user_context table exists in Supabase.'
-      );
-      return;
-    }
-
-    navigate('/', { replace: true, state: { contextReady: true } });
-  };
-
-  const canSave =
-    draft.priorities.length > 0 &&
-    (!draft.priorities.includes('Other') || draft.otherPriority.trim().length > 0) &&
-    !!draft.chronotype &&
-    !!draft.focus &&
-    draft.focusDays.length > 0;
-
   return (
     <motion.div
       className="flex flex-col min-h-[100dvh] px-8 py-12"
@@ -42,6 +9,7 @@ export function OnboardingComplete() {
       transition={{ duration: 0.5 }}
     >
       <div className="flex-1 flex flex-col justify-center">
+        {/* Wave animation */}
         <motion.div
           className="mb-12"
           initial={{ opacity: 0 }}
@@ -74,6 +42,7 @@ export function OnboardingComplete() {
           </svg>
         </motion.div>
 
+        {/* Text */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -103,32 +72,17 @@ export function OnboardingComplete() {
         </motion.div>
       </div>
 
+      {/* CTA */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.75 }}
-        className="flex flex-col gap-4"
       >
-        {saveError ? (
-          <p style={{ fontSize: '13px', color: '#7a4a4a', fontWeight: 300, lineHeight: 1.5 }}>
-            {saveError}
-          </p>
-        ) : null}
-
-        {!canSave && !saveError ? (
-          <p style={{ fontSize: '13px', color: '#5a5a5a', fontWeight: 300 }}>
-            Some answers are missing. Go back and finish the previous steps.
-          </p>
-        ) : null}
-
         <button
-          type="button"
-          disabled={isSaving || !canSave}
-          onClick={handleStart}
-          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-opacity active:opacity-80 disabled:opacity-60"
+          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-opacity active:opacity-80"
           style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
         >
-          <span>{isSaving ? 'Saving…' : 'Start drifting'}</span>
+          <span>Start</span>
           <span>→</span>
         </button>
       </motion.div>
