@@ -1,14 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
+import {
+  type BeforeInstallPromptEvent,
+  clearDeferredInstallPrompt,
+  getDeferredInstallPrompt,
+  PWA_INSTALL_AVAILABLE_EVENT,
+} from "../../lib/pwaInstall";
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
-}
-
-const DISMISSED_KEY = "drift.installPrompt.dismissed";
+const DISMISSED_KEY = "solm.installPrompt.dismissed";
+const LEGACY_DISMISSED_KEY = "drift.installPrompt.dismissed";
 
 function isStandaloneMode() {
-  return window.matchMedia("(display-mode: standalone)").matches || Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone);
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone)
+  );
 }
 
 function isIosSafari() {
@@ -20,10 +25,19 @@ function isIosSafari() {
   return isIos && isWebKit && !isCriOS && !isFxiOS;
 }
 
+function wasDismissed() {
+  return (
+    window.localStorage.getItem(DISMISSED_KEY) === "true" ||
+    window.localStorage.getItem(LEGACY_DISMISSED_KEY) === "true"
+  );
+}
+
 export function InstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isInstalled, setIsInstalled] = useState(true);
-  const [dismissed, setDismissed] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(() =>
+    getDeferredInstallPrompt(),
+  );
+  const [isInstalled, setIsInstalled] = useState(isStandaloneMode);
+  const [dismissed, setDismissed] = useState(wasDismissed);
 
   const safariNeedsInstructions = useMemo(() => !isInstalled && isIosSafari(), [isInstalled]);
   const canUseNativePrompt = useMemo(() => !isInstalled && deferredPrompt !== null, [deferredPrompt, isInstalled]);
@@ -31,23 +45,24 @@ export function InstallPrompt() {
 
   useEffect(() => {
     setIsInstalled(isStandaloneMode());
-    setDismissed(window.localStorage.getItem(DISMISSED_KEY) === "true");
+    setDismissed(wasDismissed());
 
-    const handleBeforeInstallPrompt = (event: Event) => {
-      event.preventDefault();
-      setDeferredPrompt(event as BeforeInstallPromptEvent);
+    const syncDeferredPrompt = () => {
+      setDeferredPrompt(getDeferredInstallPrompt());
     };
 
     const handleInstalled = () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
+      clearDeferredInstallPrompt();
     };
 
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    syncDeferredPrompt();
+    window.addEventListener(PWA_INSTALL_AVAILABLE_EVENT, syncDeferredPrompt);
     window.addEventListener("appinstalled", handleInstalled);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+      window.removeEventListener(PWA_INSTALL_AVAILABLE_EVENT, syncDeferredPrompt);
       window.removeEventListener("appinstalled", handleInstalled);
     };
   }, []);
@@ -62,6 +77,7 @@ export function InstallPrompt() {
     await deferredPrompt.prompt();
     const choice = await deferredPrompt.userChoice;
     setDeferredPrompt(null);
+    clearDeferredInstallPrompt();
     if (choice.outcome === "accepted") {
       setIsInstalled(true);
     }
@@ -77,7 +93,7 @@ export function InstallPrompt() {
           {canUseNativePrompt ? (
             <p className="mt-1 text-xs text-[#a8a8a8]">Add solm to your home screen for a faster, app-like experience.</p>
           ) : (
-            <p className="mt-1 text-xs text-[#a8a8a8]">In Safari, tap Share then "Add to Home Screen".</p>
+            <p className="mt-1 text-xs text-[#a8a8a8]">In Safari, tap Share then &quot;Add to Home Screen&quot;.</p>
           )}
         </div>
         <button

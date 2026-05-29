@@ -4,6 +4,7 @@ import { Outlet } from 'react-router';
 import { TaskProvider } from '../context/TaskContext';
 import { Login } from '../pages/Login';
 import { supabase } from '../../lib/supabase';
+import { AppShell } from './AppShell';
 import { InstallPrompt } from './InstallPrompt';
 
 export function Root() {
@@ -27,39 +28,27 @@ export function Root() {
 
   if (session === undefined) {
     return (
-      <div
-        className="dark min-h-[100dvh] flex justify-center"
-        style={{ background: '#0c0c0c', fontFamily: "'DM Sans', system-ui, sans-serif" }}
-      >
-        <div className="w-full max-w-[420px] min-h-[100dvh] relative" />
-      </div>
+      <AppShell>
+        <InstallPrompt />
+      </AppShell>
     );
   }
 
   if (!session) {
     return (
-      <div
-        className="dark min-h-[100dvh] flex justify-center"
-        style={{ background: '#0c0c0c', fontFamily: "'DM Sans', system-ui, sans-serif" }}
-      >
-        <div className="w-full max-w-[420px] min-h-[100dvh] relative">
-          <Login />
-        </div>
-      </div>
+      <AppShell>
+        <Login />
+        <InstallPrompt />
+      </AppShell>
     );
   }
 
   return (
     <TaskProvider>
-      <div
-        className="dark min-h-[100dvh] flex justify-center"
-        style={{ background: '#0c0c0c', fontFamily: "'DM Sans', system-ui, sans-serif" }}
-      >
-        <div className="w-full max-w-[420px] min-h-[100dvh] relative">
-          <Outlet />
-          <InstallPrompt />
-        </div>
-      </div>
+      <AppShell>
+        <Outlet />
+        <InstallPrompt />
+      </AppShell>
     </TaskProvider>
   );
 }
