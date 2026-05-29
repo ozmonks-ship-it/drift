@@ -1,4 +1,4 @@
-const CACHE_NAME = 'drift-v1';
+const CACHE_NAME = 'solm-v2';
 
 self.addEventListener('install', event => {
   self.skipWaiting();
