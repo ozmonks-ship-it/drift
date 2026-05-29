@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useTaskContext } from "../context/TaskContext";
 import React, { useState } from "react";
 import { pickNextTask, type PickUserMode } from "../../lib/claude";
+import { fetchUserContext, type UserContext } from "../../lib/userContext";
 
 export function Home() {
   const navigate = useNavigate();
@@ -10,6 +11,11 @@ export function Home() {
   const workingTask = getWorkingTask();
   const [showMode, setShowMode] = useState(false);
   const [selectedMode, setSelectedMode] = useState<PickUserMode | null>(null);
+  const [userContext, setUserContext] = useState<UserContext | null>(null);
+
+  React.useEffect(() => {
+    fetchUserContext().then(setUserContext);
+  }, []);
 
   const hasAnything = pendingCount > 0 || !!workingTask;
 
@@ -28,7 +34,7 @@ export function Home() {
     setIsPickingNextTask(true);
     navigate("/next", { state: { finding: true, mode } });
     try {
-      const pick = await pickNextTask(pending, mode);
+      const pick = await pickNextTask(pending, mode, undefined, userContext);
       setNextTask(pick.id);
       navigate("/next", { state: { finding: true, mode, pickSource: pick.source, pickReasoning: pick.reasoning }, replace: true });
     } finally {
@@ -258,6 +264,15 @@ export function Home() {
               See what's next →
             </button>
           )}
+
+          <button
+            type="button"
+            onClick={() => navigate("/settings")}
+            className="w-full py-3 px-6 transition-colors text-[#252525] hover:text-[#666]"
+            style={{ fontSize: "13px", letterSpacing: "0.05em" }}
+          >
+            Settings
+          </button>
         </motion.div>
       )}
     </motion.div>

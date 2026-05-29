@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useTaskContext } from '../context/TaskContext';
 import { useState, useEffect } from 'react';
 import { pickNextTask, type PickSource, type PickUserMode } from '../../lib/claude';
+import { fetchUserContext, type UserContext } from '../../lib/userContext';
 
 type Phase = 'finding' | 'revealing' | 'ready';
 
@@ -33,6 +34,11 @@ export function Next() {
   const location = useLocation();
   const { getNextTask, getWorkingTask, startTask, driftTask, binTask, tasks, setNextTask, isPickingNextTask, setIsPickingNextTask, sessionDriftedTasks, addSessionDriftedTask } = useTaskContext();
   const [exiting, setExiting] = useState<string | null>(null);
+  const [userContext, setUserContext] = useState<UserContext | null>(null);
+
+  useEffect(() => {
+    fetchUserContext().then(setUserContext);
+  }, []);
 
   const navState = (location.state as NextPickLocationState | null) ?? {};
   const fromModeSelect = !!navState.finding;
@@ -88,7 +94,13 @@ export function Next() {
           .filter(t => t.status === 'pending' && t.id !== displayTask.id);
         try {
           addSessionDriftedTask(displayTask.description);
-          const pick = await pickNextTask(pending, mode, [...sessionDriftedTasks, displayTask.description]);
+          const ctx = userContext ?? (await fetchUserContext());
+          const pick = await pickNextTask(
+            pending,
+            mode,
+            [...sessionDriftedTasks, displayTask.description],
+            ctx
+          );
           setNextTask(pick.id);
           setPickSource(pick.source);
           setPickReasoning(pick.reasoning);

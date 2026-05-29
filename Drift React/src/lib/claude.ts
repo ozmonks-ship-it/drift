@@ -1,3 +1,8 @@
+import {
+  buildPersonalContextPrompt,
+  type UserContext,
+} from './userContext';
+
 const CLAUDE_API_KEY = import.meta.env.VITE_CLAUDE_API_KEY;
 
 const PERSONAL_CONTEXT = `
@@ -43,7 +48,8 @@ export interface PickResult {
 export async function pickNextTask(
   tasks: { id: string; description: string }[],
   mode: PickUserMode,
-  driftedTasks?: string[]
+  driftedTasks?: string[],
+  userContext?: UserContext | null
 ): Promise<PickResult> {
   if (tasks.length === 0) return { id: null, source: 'empty', reasoning: null };
   if (tasks.length === 1) return { id: tasks[0].id, source: 'single', reasoning: null };
@@ -67,7 +73,7 @@ export async function pickNextTask(
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1000,
-      system: PERSONAL_CONTEXT,
+      system: userContext ? buildPersonalContextPrompt(userContext) : PERSONAL_CONTEXT,
       messages: [
         {
           role: 'user',
