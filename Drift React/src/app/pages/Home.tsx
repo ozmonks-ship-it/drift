@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { useTaskContext } from "../context/TaskContext";
 import React, { useState } from "react";
+import { SolmLogo } from "../components/SolmLogo";
 import { pickNextTask, type PickUserMode } from "../../lib/claude";
 import { fetchUserContext, type UserContext } from "../../lib/userContext";
 
@@ -109,23 +110,7 @@ export function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <p
-            className="text-[#2e2e2e] tracking-[0.28em] uppercase mb-3"
-            style={{ fontSize: "10px" }}
-          >
-            your flow
-          </p>
-          <h1
-            className="text-white"
-            style={{
-              fontSize: "56px",
-              fontWeight: 300,
-              letterSpacing: "-0.03em",
-              lineHeight: 1,
-            }}
-          >
-            Drift
-          </h1>
+          <SolmLogo size="lg" className="text-white" />
         </motion.div>
 
         {/* Status */}

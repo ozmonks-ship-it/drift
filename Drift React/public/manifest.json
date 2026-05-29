@@ -1,7 +1,7 @@
 {
-    "name": "Drift",
-    "short_name": "Drift",
-    "description": "Just drift through life. Easy.",
+    "name": "solm",
+    "short_name": "solm",
+    "description": "One thing at a time.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#0c0c0c",

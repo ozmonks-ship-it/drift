@@ -73,9 +73,9 @@ export function InstallPrompt() {
     <div className="fixed bottom-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-[420px] -translate-x-1/2 rounded-2xl border border-[#2a2a2a] bg-[#111] px-4 py-3 text-[#d9d9d9] shadow-lg">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-white">Install Drift</p>
+          <p className="text-sm font-medium text-white">Install solm</p>
           {canUseNativePrompt ? (
-            <p className="mt-1 text-xs text-[#a8a8a8]">Add Drift to your home screen for a faster, app-like experience.</p>
+            <p className="mt-1 text-xs text-[#a8a8a8]">Add solm to your home screen for a faster, app-like experience.</p>
           ) : (
             <p className="mt-1 text-xs text-[#a8a8a8]">In Safari, tap Share then "Add to Home Screen".</p>
           )}

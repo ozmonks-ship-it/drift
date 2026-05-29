@@ -118,7 +118,7 @@ export function OnboardingSchedule() {
             className="tracking-[0.2em] uppercase mb-4"
             style={{ fontSize: '11px', color: '#3a3a3a' }}
           >
-            Anything else Drift should know about your week?
+            Anything else solm should know about your week?
           </p>
           <textarea
             value={notes}

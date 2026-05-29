@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
+import { SolmLogo } from '../../components/SolmLogo';
 
 export function OnboardingWelcome() {
   const navigate = useNavigate();
@@ -17,19 +18,8 @@ export function OnboardingWelcome() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <h1
-            className="text-white"
-            style={{
-              fontSize: '56px',
-              fontWeight: 300,
-              letterSpacing: '-0.03em',
-              lineHeight: 1,
-            }}
-          >
-            Drift
-          </h1>
+          <SolmLogo size="lg" className="text-white mb-6" />
           <p
-            className="mt-6"
             style={{
               fontSize: '18px',
               fontWeight: 300,
@@ -38,7 +28,7 @@ export function OnboardingWelcome() {
               letterSpacing: '-0.01em',
             }}
           >
-            Let&apos;s get to know you so Drift can pick the right things for you.
+            Let&apos;s get to know you so solm can pick the right things for you.
           </p>
         </motion.div>
       </div>

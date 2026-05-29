@@ -98,7 +98,7 @@ export function OnboardingComplete() {
               lineHeight: 1.6,
             }}
           >
-            Drift knows what matters. Now let it pick.
+            solm knows what matters. Now let it pick.
           </p>
         </motion.div>
       </div>

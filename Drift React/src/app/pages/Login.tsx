@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { SolmLogo } from '../components/SolmLogo';
 import { supabase } from '../../lib/supabase';
 
 export function Login() {
@@ -40,17 +41,7 @@ export function Login() {
       style={{ background: '#0c0c0c' }}
     >
       <div className="flex-1 flex flex-col justify-center">
-        <h1
-          className="text-white"
-          style={{
-            fontSize: '56px',
-            fontWeight: 300,
-            letterSpacing: '-0.03em',
-            lineHeight: 1,
-          }}
-        >
-          Drift
-        </h1>
+        <SolmLogo size="lg" className="text-white mb-4" />
         <p
           className="mt-4"
           style={{ fontSize: '14px', color: '#3a3a3a', fontWeight: 300 }}
