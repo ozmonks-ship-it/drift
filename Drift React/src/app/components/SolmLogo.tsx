@@ -1,6 +1,6 @@
-type SolmLogoSize = 'sm' | 'md' | 'lg';
+export type SolmLogoSize = 'sm' | 'md' | 'lg';
 
-const sizeConfig = {
+export const sizeConfig = {
   sm: { mark: 18, word: 24, gap: 8 },
   md: { mark: 28, word: 36, gap: 10 },
   lg: { mark: 40, word: 56, gap: 12 },

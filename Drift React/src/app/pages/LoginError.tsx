@@ -1,47 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
 import { LoginLogoHero } from '../components/LogoLockup';
-import { supabase } from '../../lib/supabase';
-import { LoginError } from './LoginError';
 
-export function Login() {
-  const [hasError, setHasError] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+type LoginErrorProps = {
+  onGoogle: () => void;
+  isSubmitting?: boolean;
+};
 
-  useEffect(() => {
-    const search = new URLSearchParams(window.location.search);
-    const hash =
-      window.location.hash.startsWith('#') ? window.location.hash.slice(1) : '';
-    const hashParams = new URLSearchParams(hash);
-    const oauthError =
-      search.get('error') ??
-      hashParams.get('error') ??
-      search.get('error_code') ??
-      hashParams.get('error_code');
-    if (oauthError) {
-      setHasError(true);
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, []);
-
-  const handleGoogle = useCallback(async () => {
-    setHasError(false);
-    setIsSubmitting(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin },
-    });
-    setIsSubmitting(false);
-    if (error) {
-      setHasError(true);
-    }
-  }, []);
-
-  if (hasError) {
-    return (
-      <LoginError onGoogle={handleGoogle} isSubmitting={isSubmitting} />
-    );
-  }
-
+export function LoginError({ onGoogle, isSubmitting = false }: LoginErrorProps) {
   return (
     <div
       className="flex flex-col min-h-[100dvh] px-8 py-12"
@@ -55,7 +19,7 @@ export function Login() {
         <button
           type="button"
           disabled={isSubmitting}
-          onClick={handleGoogle}
+          onClick={onGoogle}
           className="w-full rounded-2xl py-5 px-6 flex items-center justify-center gap-3 transition-opacity active:opacity-80 disabled:opacity-60"
           style={{ background: '#f2f2f2', color: '#0c0c0c' }}
         >
@@ -64,6 +28,13 @@ export function Login() {
             Continue with Google
           </span>
         </button>
+
+        <p
+          className="text-center"
+          style={{ fontSize: '13px', color: '#7a4a4a', fontWeight: 300 }}
+        >
+          Something went wrong. Please try again.
+        </p>
       </div>
     </div>
   );
