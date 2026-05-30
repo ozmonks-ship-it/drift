@@ -25,7 +25,7 @@ export function SolmMark({ size = 'md', className }: SolmMarkProps) {
       aria-hidden
     >
       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1" />
-      <circle cx="12" cy="12" r="1.25" fill="currentColor" />
+      <circle cx="12" cy="12" r="4" fill="currentColor" />
     </svg>
   );
 }

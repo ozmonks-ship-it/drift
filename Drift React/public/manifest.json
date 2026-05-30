@@ -2,7 +2,7 @@
   "id": "/",
   "name": "solm",
   "short_name": "solm",
-  "description": "One thing at a time.",
+  "description": "The one thing.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
