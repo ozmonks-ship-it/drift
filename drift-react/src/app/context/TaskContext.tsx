@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
+import posthog from 'posthog-js';
 import { supabase } from '../../lib/supabase';
 
 export type { PickUserMode } from '../../lib/claude';
@@ -25,11 +26,20 @@ interface TaskContextType {
   isPickingNextTask: boolean;
   setIsPickingNextTask: (isPicking: boolean) => void;
   sessionDriftedTasks: string[];
-    addSessionDriftedTask: (description: string) => void;
-    clearSessionDriftedTasks: () => void;
+  addSessionDriftedTask: (description: string) => void;
+  clearSessionDriftedTasks: () => void;
 }
 
 const TaskContext = createContext<TaskContextType | null>(null);
+
+// Safe PostHog wrapper — never blocks the app if PostHog isn't ready.
+function track(event: string, properties?: Record<string, unknown>) {
+  try {
+    posthog.capture(event, properties);
+  } catch {
+    // ignore — PostHog may not be initialised in dev
+  }
+}
 
 export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -37,6 +47,9 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   const [nextTaskId, setNextTaskId] = useState<string | null>(null);
   const [sessionDriftedTasks, setSessionDriftedTasks] = useState<string[]>([]);
   const [isPickingNextTask, setIsPickingNextTask] = useState(false);
+
+  // Tracks when the current "picking" started, so we can report pick latency.
+  const pickStartedAtRef = useRef<number | null>(null);
 
   useEffect(() => {
     async function fetchTasks() {
@@ -62,9 +75,10 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const addTask = useCallback(async (description: string) => {
+    const trimmed = description.trim();
     const { data, error } = await supabase
       .from('tasks')
-      .insert({ title: description.trim(), status: 'pending', energy: 'medium' })
+      .insert({ title: trimmed, status: 'pending', energy: 'medium' })
       .select()
       .single();
     if (!error && data) {
@@ -74,6 +88,10 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
         status: data.status,
         createdAt: new Date(data.created_at).getTime(),
       }]);
+      track('task_captured', {
+        task_id: data.id,
+        char_count: trimmed.length,
+      });
     }
   }, []);
 
@@ -99,6 +117,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       if (t.status === 'working') return { ...t, status: 'pending' };
       return t;
     }));
+    track('task_started', { task_id: id });
   }, []);
 
   const driftTask = useCallback(async (id: string) => {
@@ -107,17 +126,47 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
     setTasks(prev => prev.map(t =>
       t.id === id ? { ...t, status: 'pending', createdAt: Date.now() } : t
     ));
-  }, []);
+    track('task_drifted', {
+      task_id: id,
+      position: sessionDriftedTasks.length + 1,
+    });
+  }, [sessionDriftedTasks.length]);
 
   const binTask = useCallback(async (id: string) => {
     await supabase.from('tasks').update({ status: 'binned' }).eq('id', id);
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'binned' } : t));
+    track('task_binned', { task_id: id });
   }, []);
 
   const completeTask = useCallback(async (id: string) => {
     await supabase.from('tasks').update({ status: 'completed' }).eq('id', id);
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'completed' } : t));
     setNextTaskId(prev => (prev === id ? null : prev));
+    track('task_completed', { task_id: id });
+  }, []);
+
+  // Wrap setNextTaskId to fire `task_picked` when a non-null id is assigned.
+  const setNextTask = useCallback((id: string | null) => {
+    if (id !== null) {
+      const latency = pickStartedAtRef.current !== null
+        ? Date.now() - pickStartedAtRef.current
+        : undefined;
+      track('task_picked', {
+        task_id: id,
+        pick_latency_ms: latency,
+        had_drifts_before_pick: sessionDriftedTasks.length,
+      });
+      pickStartedAtRef.current = null;
+    }
+    setNextTaskId(id);
+  }, [sessionDriftedTasks.length]);
+
+  // Wrap setIsPickingNextTask to record when picking started, so we can compute latency.
+  const handleSetIsPickingNextTask = useCallback((isPicking: boolean) => {
+    if (isPicking) {
+      pickStartedAtRef.current = Date.now();
+    }
+    setIsPickingNextTask(isPicking);
   }, []);
 
   const pendingCount = tasks.filter(t => t.status === 'pending').length;
@@ -134,13 +183,13 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       completeTask,
       getWorkingTask,
       pendingCount,
-      setNextTask: setNextTaskId,
+      setNextTask,
       isPickingNextTask,
-      setIsPickingNextTask,
+      setIsPickingNextTask: handleSetIsPickingNextTask,
       sessionDriftedTasks,
-        addSessionDriftedTask: (description: string) => 
-          setSessionDriftedTasks(prev => [...prev, description]),
-        clearSessionDriftedTasks: () => setSessionDriftedTasks([]),
+      addSessionDriftedTask: (description: string) =>
+        setSessionDriftedTasks(prev => [...prev, description]),
+      clearSessionDriftedTasks: () => setSessionDriftedTasks([]),
     }}>
       {children}
     </TaskContext.Provider>
