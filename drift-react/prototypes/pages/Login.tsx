@@ -4,10 +4,7 @@ import { LogoLockup } from "../components/LogoLockup";
 export function Login() {
   const navigate = useNavigate();
   return (
-    <div
-      className="flex flex-col min-h-[100dvh] px-8 py-12"
-      style={{ background: "#0c0c0c" }}
-    >
+    <div className="flex flex-col min-h-[100dvh] px-8 py-12">
       {/* Hero */}
       <div className="flex-1 flex flex-col justify-center">
         <LogoLockup color="#ffffff" />
