@@ -134,19 +134,19 @@ export function Next() {
       >
         <button
           onClick={() => navigate('/')}
-          className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
+          className="text-solm-5 hover:text-solm-2 transition-colors self-start mb-12"
           style={{ fontSize: '13px', letterSpacing: '0.05em' }}
         >
           ← back
         </button>
         <div className="flex-1 flex flex-col justify-center">
-          <p className="text-[#3a3a3a] tracking-[0.25em] uppercase mb-4" style={{ fontSize: '11px' }}>
+          <p className="text-solm-4 tracking-[0.25em] uppercase mb-4" style={{ fontSize: '11px' }}>
             all clear
           </p>
           <h2 className="text-white mb-4" style={{ fontSize: '28px', fontWeight: 300, letterSpacing: '-0.01em', lineHeight: 1.3 }}>
             Nothing to do.
           </h2>
-          <p className="text-[#3a3a3a]" style={{ fontSize: '15px' }}>
+          <p className="text-solm-4" style={{ fontSize: '15px' }}>
             Add a task to get started.
           </p>
         </div>
@@ -176,7 +176,7 @@ export function Next() {
         {phase !== 'finding' && visible && (
           <motion.button
             onClick={() => navigate('/')}
-            className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
+            className="text-solm-5 hover:text-solm-2 transition-colors self-start mb-12"
             style={{ fontSize: '13px', letterSpacing: '0.05em' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -225,9 +225,9 @@ export function Next() {
               />
             </div>
             <motion.p
-              className="text-[#2e2e2e] tracking-[0.28em] uppercase"
+              className="text-solm-3 tracking-[0.28em] uppercase"
               style={{ fontSize: '10px' }}
-              animate={{ opacity: [0.4, 0.8, 0.4] }}
+              animate={{ opacity: [0.75, 1, 0.75] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
             >
               finding your task
@@ -253,7 +253,7 @@ export function Next() {
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               <motion.p
-                className="text-[#3a3a3a] tracking-[0.25em] uppercase mb-6"
+                className="text-solm-4 tracking-[0.25em] uppercase mb-6"
                 style={{ fontSize: '11px' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -263,7 +263,7 @@ export function Next() {
               </motion.p>
               {!workingTask && pickSource === 'fallback' && (
                 <motion.p
-                  className="text-[#6b5a2a] mb-3"
+                  className="text-solm-accent mb-3"
                   style={{ fontSize: '12px' }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -296,7 +296,7 @@ export function Next() {
                       style={{
                         fontSize: '12px',
                         letterSpacing: '0.12em',
-                        color: showWhy ? '#555' : '#333',
+                        color: showWhy ? 'var(--solm-text-4)' : 'var(--solm-text-5)',
                       }}
                     >
                       {showWhy ? 'close ×' : 'why this? ↓'}
@@ -317,13 +317,13 @@ export function Next() {
                             style={{ background: '#0f0f0f' }}
                           >
                             <p
-                              className="text-[#2e2e2e] tracking-[0.2em] uppercase mb-3"
+                              className="text-solm-3 tracking-[0.2em] uppercase mb-3"
                               style={{ fontSize: '10px' }}
                             >
                               claude's reasoning
                             </p>
                             <p
-                              className="text-[#4a4a4a]"
+                              className="text-solm-4"
                               style={{
                                 fontSize: '14px',
                                 fontWeight: 300,
@@ -374,14 +374,14 @@ export function Next() {
               <button
                 onClick={handleDrift}
                 className="flex-1 rounded-2xl py-5 px-6 border border-[#242424] hover:border-[#383838] transition-colors"
-                style={{ color: '#666', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
+                style={{ color: 'var(--solm-text-2)', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
               >
                 Drift ~
               </button>
               <button
                 onClick={handleBin}
-                className="flex-1 rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#2e2e2e] transition-colors"
-                style={{ color: '#3a3a3a', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
+                className="flex-1 rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#9e9e9e] transition-colors"
+                style={{ color: 'var(--solm-text-4)', fontSize: '16px', fontWeight: 400, textAlign: 'left' }}
               >
                 Bin ×
               </button>

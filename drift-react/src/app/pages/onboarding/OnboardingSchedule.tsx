@@ -58,7 +58,7 @@ export function OnboardingSchedule() {
         type="button"
         onClick={handleBack}
         className="self-start mb-10 transition-colors"
-        style={{ fontSize: '13px', letterSpacing: '0.05em', color: '#444' }}
+        style={{ fontSize: '13px', letterSpacing: '0.05em', color: 'var(--solm-text-5)' }}
       >
         ← back
       </button>
@@ -66,7 +66,7 @@ export function OnboardingSchedule() {
       {!fromSettings && (
         <p
           className="tracking-[0.25em] uppercase mb-8"
-          style={{ fontSize: '11px', color: '#2e2e2e' }}
+          style={{ fontSize: '11px', color: 'var(--solm-text-3)' }}
         >
           3 of 4
         </p>
@@ -83,7 +83,7 @@ export function OnboardingSchedule() {
         <div>
           <p
             className="tracking-[0.2em] uppercase mb-5"
-            style={{ fontSize: '11px', color: '#3a3a3a' }}
+            style={{ fontSize: '11px', color: 'var(--solm-text-4)' }}
           >
             Days of the week
           </p>
@@ -102,7 +102,7 @@ export function OnboardingSchedule() {
                     width: '42px',
                     height: '42px',
                     borderColor: active ? '#ffffff' : '#242424',
-                    color: active ? '#ffffff' : '#555',
+                    color: active ? 'var(--solm-text-1)' : 'var(--solm-text-4)',
                     background: 'transparent',
                   }}
                 >
@@ -116,7 +116,7 @@ export function OnboardingSchedule() {
         <div>
           <p
             className="tracking-[0.2em] uppercase mb-4"
-            style={{ fontSize: '11px', color: '#3a3a3a' }}
+            style={{ fontSize: '11px', color: 'var(--solm-text-4)' }}
           >
             Anything else solm should know about your week?
           </p>
@@ -125,11 +125,11 @@ export function OnboardingSchedule() {
             onChange={(e) => setNotes(e.target.value)}
             placeholder="e.g. I pick up kids on Tuesdays, Thursday evenings are date night..."
             rows={4}
-            className="w-full rounded-2xl border border-[#1e1e1e] bg-transparent resize-none outline-none transition-colors focus:border-[#333] placeholder:text-[#2a2a2a]"
+            className="w-full rounded-2xl border border-[#1e1e1e] bg-transparent resize-none outline-none transition-colors focus:border-[#333] placeholder:text-solm-5"
             style={{
               fontSize: '14px',
               fontWeight: 300,
-              color: '#888',
+              color: 'var(--solm-text-2)',
               padding: '16px 20px',
               lineHeight: 1.6,
             }}

@@ -81,7 +81,7 @@ export function OnboardingPriorities() {
       <button
         type="button"
         onClick={handleBack}
-        className="self-start mb-10 text-[#444] hover:text-[#666] transition-colors"
+        className="self-start mb-10 text-solm-5 hover:text-solm-2 transition-colors"
         style={{ fontSize: '13px', letterSpacing: '0.05em' }}
       >
         ← back
@@ -90,7 +90,7 @@ export function OnboardingPriorities() {
       {!fromSettings && (
         <p
           className="tracking-[0.25em] uppercase mb-8"
-          style={{ fontSize: '11px', color: '#2e2e2e' }}
+          style={{ fontSize: '11px', color: 'var(--solm-text-3)' }}
         >
           1 of 4
         </p>
@@ -103,7 +103,7 @@ export function OnboardingPriorities() {
         >
           What matters most in your life right now?
         </h2>
-        <p style={{ fontSize: '14px', color: '#3a3a3a', fontWeight: 300 }}>
+        <p style={{ fontSize: '14px', color: 'var(--solm-text-4)', fontWeight: 300 }}>
           Choose up to 3. You can change these anytime.
         </p>
       </div>
@@ -125,7 +125,7 @@ export function OnboardingPriorities() {
                   fontSize: '14px',
                   fontWeight: 300,
                   borderColor: isSelected ? '#ffffff' : '#242424',
-                  color: isSelected ? '#ffffff' : isDisabled ? '#2a2a2a' : '#555',
+                  color: isSelected ? 'var(--solm-text-1)' : isDisabled ? 'var(--solm-text-5)' : 'var(--solm-text-4)',
                   background: 'transparent',
                   cursor: isDisabled ? 'default' : 'pointer',
                 }}
@@ -134,7 +134,7 @@ export function OnboardingPriorities() {
                   <span
                     style={{
                       fontSize: '10px',
-                      color: '#888',
+                      color: 'var(--solm-text-2)',
                       fontWeight: 400,
                       letterSpacing: '0.05em',
                       minWidth: '10px',
@@ -164,11 +164,11 @@ export function OnboardingPriorities() {
                 value={otherText}
                 onChange={(e) => setOtherText(e.target.value)}
                 placeholder="What else matters to you?"
-                className="w-full rounded-2xl border border-[#1e1e1e] bg-transparent outline-none transition-colors focus:border-[#333] placeholder:text-[#2a2a2a]"
+                className="w-full rounded-2xl border border-[#1e1e1e] bg-transparent outline-none transition-colors focus:border-[#333] placeholder:text-solm-5"
                 style={{
                   fontSize: '14px',
                   fontWeight: 300,
-                  color: '#888',
+                  color: 'var(--solm-text-2)',
                   padding: '14px 20px',
                 }}
               />

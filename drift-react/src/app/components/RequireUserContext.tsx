@@ -34,13 +34,13 @@ export function RequireUserContext() {
           {[0, 1, 2].map((i) => (
             <span
               key={i}
-              className="block rounded-full bg-[#2e2e2e]"
+              className="block rounded-full bg-solm-3"
               style={{ width: 5, height: 5, opacity: 0.4 }}
             />
           ))}
         </div>
         <p
-          className="text-[#252525] tracking-[0.25em] uppercase"
+          className="text-solm-5 tracking-[0.25em] uppercase"
           style={{ fontSize: '10px' }}
         >
           loading
@@ -72,7 +72,7 @@ export function RedirectIfOnboarded({ children }: { children: React.ReactNode })
   if (hasContext === null) {
     return (
       <div className="flex flex-col min-h-[100dvh] items-center justify-center">
-        <p className="text-[#252525] tracking-[0.25em] uppercase" style={{ fontSize: '10px' }}>
+        <p className="text-solm-5 tracking-[0.25em] uppercase" style={{ fontSize: '10px' }}>
           loading
         </p>
       </div>

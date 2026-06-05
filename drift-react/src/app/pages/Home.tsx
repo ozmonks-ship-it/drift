@@ -64,7 +64,7 @@ export function Home() {
             {[0, 1, 2].map((i) => (
               <motion.span
                 key={i}
-                className="block rounded-full bg-[#2e2e2e]"
+                className="block rounded-full bg-solm-3"
                 style={{ width: 5, height: 5 }}
                 animate={{ opacity: [0.2, 0.8, 0.2], y: [0, -4, 0] }}
                 transition={{
@@ -77,9 +77,9 @@ export function Home() {
             ))}
           </div>
           <motion.p
-            className="text-[#252525] tracking-[0.25em] uppercase"
+            className="text-solm-5 tracking-[0.25em] uppercase"
             style={{ fontSize: "10px" }}
-            animate={{ opacity: [0.4, 0.7, 0.4] }}
+            animate={{ opacity: [0.75, 1, 0.75] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
           >
             loading
@@ -96,7 +96,7 @@ export function Home() {
       {showMode && (
         <button
           onClick={() => setShowMode(false)}
-          className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
+          className="text-solm-5 hover:text-solm-2 transition-colors self-start mb-12"
           style={{ fontSize: '13px', letterSpacing: '0.05em' }}
         >
           ← back
@@ -123,7 +123,7 @@ export function Home() {
           {workingTask ? (
             <div className="border border-[#1e1e1e] rounded-2xl p-5">
               <p
-                className="text-[#2e2e2e] mb-2"
+                className="text-solm-3 mb-2"
                 style={{
                   fontSize: "10px",
                   letterSpacing: "0.2em",
@@ -133,7 +133,7 @@ export function Home() {
                 In progress
               </p>
               <p
-                className="text-[#666] line-clamp-3"
+                className="text-solm-2 line-clamp-3"
                 style={{
                   fontSize: "15px",
                   fontWeight: 300,
@@ -144,11 +144,11 @@ export function Home() {
               </p>
             </div>
           ) : pendingCount > 0 ? (
-            <p className="text-[#2e2e2e]" style={{ fontSize: "13px" }}>
+            <p className="text-solm-3" style={{ fontSize: "13px" }}>
               {pendingCount} task{pendingCount !== 1 ? "s" : ""} waiting
             </p>
           ) : (
-            <p className="text-[#2a2a2a]" style={{ fontSize: "13px" }}>
+            <p className="text-solm-5" style={{ fontSize: "13px" }}>
               Nothing here yet.
             </p>
           )}
@@ -165,7 +165,7 @@ export function Home() {
               transition={{ duration: 0.3 }}
             >
               <p
-                className="text-[#3a3a3a] mb-5 tracking-[0.2em] uppercase"
+                className="text-solm-4 mb-5 tracking-[0.2em] uppercase"
                 style={{ fontSize: "11px" }}
               >
                 Pick your pace
@@ -196,7 +196,7 @@ export function Home() {
                       }}
                       className="w-full rounded-2xl py-4 px-6 border transition-colors text-left"
                       style={{
-                        color: isSelected ? "#ccc" : "#888",
+                        color: isSelected ? "var(--solm-text-2)" : "var(--solm-text-4)",
                         fontSize: "16px",
                         borderColor: isSelected ? "#444" : "#242424",
                       }}
@@ -234,7 +234,7 @@ export function Home() {
           <button
             onClick={() => navigate("/add")}
             className="w-full rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#2a2a2a] transition-colors flex items-center justify-between"
-            style={{ color: "#555" }}
+            style={{ color: "var(--solm-text-4)" }}
           >
             <span style={{ fontSize: "17px", fontWeight: 400 }}>Add task</span>
             <span style={{ fontSize: "17px", opacity: 0.4 }}>+</span>
@@ -244,7 +244,7 @@ export function Home() {
             <button
               onClick={() => navigate("/next")}
               className="w-full rounded-2xl py-4 px-6 transition-colors"
-              style={{ color: "#333", fontSize: "14px" }}
+              style={{ color: "var(--solm-text-5)", fontSize: "14px" }}
             >
               See what's next →
             </button>
@@ -253,7 +253,7 @@ export function Home() {
           <button
             type="button"
             onClick={() => navigate("/settings")}
-            className="w-full py-3 px-6 transition-colors text-[#252525] hover:text-[#666]"
+            className="w-full py-3 px-6 transition-colors text-solm-5 hover:text-solm-2"
             style={{ fontSize: "13px", letterSpacing: "0.05em" }}
           >
             Settings

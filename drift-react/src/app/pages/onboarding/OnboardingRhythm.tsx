@@ -37,7 +37,7 @@ function SingleSelect({
               fontSize: '14px',
               fontWeight: 300,
               borderColor: active ? '#ffffff' : '#242424',
-              color: active ? '#ffffff' : '#555',
+              color: active ? 'var(--solm-text-1)' : 'var(--solm-text-4)',
               background: 'transparent',
             }}
           >
@@ -75,7 +75,7 @@ function MultiSelect({
               fontSize: '14px',
               fontWeight: 300,
               borderColor: active ? '#ffffff' : '#242424',
-              color: active ? '#ffffff' : '#555',
+              color: active ? 'var(--solm-text-1)' : 'var(--solm-text-4)',
               background: 'transparent',
             }}
           >
@@ -137,7 +137,7 @@ export function OnboardingRhythm() {
         type="button"
         onClick={handleBack}
         className="self-start mb-10 transition-colors"
-        style={{ fontSize: '13px', letterSpacing: '0.05em', color: '#444' }}
+        style={{ fontSize: '13px', letterSpacing: '0.05em', color: 'var(--solm-text-5)' }}
       >
         ← back
       </button>
@@ -145,7 +145,7 @@ export function OnboardingRhythm() {
       {!fromSettings && (
         <p
           className="tracking-[0.25em] uppercase mb-8"
-          style={{ fontSize: '11px', color: '#2e2e2e' }}
+          style={{ fontSize: '11px', color: 'var(--solm-text-3)' }}
         >
           2 of 4
         </p>
@@ -162,7 +162,7 @@ export function OnboardingRhythm() {
         <div>
           <p
             className="tracking-[0.2em] uppercase mb-4"
-            style={{ fontSize: '11px', color: '#3a3a3a' }}
+            style={{ fontSize: '11px', color: 'var(--solm-text-4)' }}
           >
             I&apos;m a...
           </p>
@@ -176,7 +176,7 @@ export function OnboardingRhythm() {
         <div>
           <p
             className="tracking-[0.2em] uppercase mb-4"
-            style={{ fontSize: '11px', color: '#3a3a3a' }}
+            style={{ fontSize: '11px', color: 'var(--solm-text-4)' }}
           >
             My focus time is...
           </p>
@@ -186,7 +186,7 @@ export function OnboardingRhythm() {
         <div>
           <p
             className="tracking-[0.2em] uppercase mb-4"
-            style={{ fontSize: '11px', color: '#3a3a3a' }}
+            style={{ fontSize: '11px', color: 'var(--solm-text-4)' }}
           >
             I tend to...
           </p>

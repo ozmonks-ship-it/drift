@@ -23,7 +23,7 @@ export function OnboardingWelcome() {
             style={{
               fontSize: '18px',
               fontWeight: 300,
-              color: '#4a4a4a',
+              color: 'var(--solm-text-2)',
               lineHeight: 1.6,
               letterSpacing: '-0.01em',
             }}
@@ -51,7 +51,7 @@ export function OnboardingWelcome() {
 
         <p
           className="text-center"
-          style={{ fontSize: '12px', color: '#2e2e2e', fontWeight: 300, letterSpacing: '0.05em' }}
+          style={{ fontSize: '12px', color: 'var(--solm-text-3)', fontWeight: 300, letterSpacing: '0.05em' }}
         >
           Takes about 2 minutes
         </p>

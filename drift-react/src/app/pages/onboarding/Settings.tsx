@@ -25,7 +25,7 @@ function SectionCard({
       <div className="flex items-center justify-between mb-4">
         <p
           className="tracking-[0.22em] uppercase"
-          style={{ fontSize: '10px', color: '#2e2e2e' }}
+          style={{ fontSize: '10px', color: 'var(--solm-text-3)' }}
         >
           {label}
         </p>
@@ -33,7 +33,7 @@ function SectionCard({
           type="button"
           onClick={onEdit}
           className="transition-colors"
-          style={{ fontSize: '12px', color: '#444', letterSpacing: '0.05em' }}
+          style={{ fontSize: '12px', color: 'var(--solm-text-5)', letterSpacing: '0.05em' }}
         >
           Edit →
         </button>
@@ -64,7 +64,7 @@ export function Settings() {
   if (loading) {
     return (
       <div className="flex flex-col min-h-[100dvh] items-center justify-center">
-        <p className="text-[#252525] tracking-[0.25em] uppercase" style={{ fontSize: '10px' }}>
+        <p className="text-solm-5 tracking-[0.25em] uppercase" style={{ fontSize: '10px' }}>
           loading
         </p>
       </div>
@@ -89,7 +89,7 @@ export function Settings() {
           type="button"
           onClick={() => navigate('/')}
           className="transition-colors"
-          style={{ fontSize: '13px', letterSpacing: '0.05em', color: '#444' }}
+          style={{ fontSize: '13px', letterSpacing: '0.05em', color: 'var(--solm-text-5)' }}
         >
           ← back
         </button>
@@ -97,7 +97,7 @@ export function Settings() {
 
       <p
         className="tracking-[0.25em] uppercase mb-2"
-        style={{ fontSize: '11px', color: '#2e2e2e' }}
+        style={{ fontSize: '11px', color: 'var(--solm-text-3)' }}
       >
         your context
       </p>
@@ -118,7 +118,7 @@ export function Settings() {
               <span
                 key={p}
                 className="rounded-2xl border border-[#242424] px-3 py-1.5"
-                style={{ fontSize: '13px', fontWeight: 300, color: '#555' }}
+                style={{ fontSize: '13px', fontWeight: 300, color: 'var(--solm-text-4)' }}
               >
                 {formatPriorityLabel(p, ctx.other_priority)}
               </span>
@@ -135,11 +135,11 @@ export function Settings() {
               <div className="flex items-baseline gap-3">
                 <span
                   className="tracking-[0.15em] uppercase"
-                  style={{ fontSize: '10px', color: '#2e2e2e', flexShrink: 0 }}
+                  style={{ fontSize: '10px', color: 'var(--solm-text-3)', flexShrink: 0 }}
                 >
                   Type
                 </span>
-                <span style={{ fontSize: '14px', fontWeight: 300, color: '#666' }}>
+                <span style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-2)' }}>
                   {chronotype}
                 </span>
               </div>
@@ -148,11 +148,11 @@ export function Settings() {
               <div className="flex items-baseline gap-3">
                 <span
                   className="tracking-[0.15em] uppercase"
-                  style={{ fontSize: '10px', color: '#2e2e2e', flexShrink: 0 }}
+                  style={{ fontSize: '10px', color: 'var(--solm-text-3)', flexShrink: 0 }}
                 >
                   Focus
                 </span>
-                <span style={{ fontSize: '14px', fontWeight: 300, color: '#666' }}>
+                <span style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-2)' }}>
                   {focus}
                 </span>
               </div>
@@ -163,7 +163,7 @@ export function Settings() {
                   <span
                     key={t}
                     className="rounded-2xl border border-[#1e1e1e] px-3 py-1.5"
-                    style={{ fontSize: '12px', fontWeight: 300, color: '#444' }}
+                    style={{ fontSize: '12px', fontWeight: 300, color: 'var(--solm-text-5)' }}
                   >
                     {t}
                   </span>
@@ -194,7 +194,7 @@ export function Settings() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       borderColor: active ? '#383838' : '#1a1a1a',
-                      color: active ? '#888' : '#2a2a2a',
+                      color: active ? 'var(--solm-text-2)' : 'var(--solm-text-5)',
                     }}
                   >
                     {day}
@@ -207,7 +207,7 @@ export function Settings() {
                 style={{
                   fontSize: '13px',
                   fontWeight: 300,
-                  color: '#3a3a3a',
+                  color: 'var(--solm-text-4)',
                   lineHeight: 1.6,
                   whiteSpace: 'pre-wrap',
                 }}
@@ -224,14 +224,14 @@ export function Settings() {
           type="button"
           onClick={handleSignOut}
           className="transition-colors"
-          style={{ fontSize: '13px', color: '#2e2e2e', letterSpacing: '0.05em' }}
+          style={{ fontSize: '13px', color: 'var(--solm-text-3)', letterSpacing: '0.05em' }}
         >
           Sign out
         </button>
         <button
           type="button"
           onClick={() => navigate('/privacy')}
-          className="transition-colors text-[#1e1e1e] hover:text-[#444]"
+          className="transition-colors text-solm-5 hover:text-solm-3"
           style={{ fontSize: '11px', letterSpacing: '0.06em' }}
         >
           Privacy policy

@@ -59,7 +59,7 @@ export function OnboardingComplete() {
               <motion.path
                 key={i}
                 d={`M0 ${6 + yOffset} Q6 ${2 + yOffset} 12 ${6 + yOffset} Q18 ${10 + yOffset} 24 ${6 + yOffset} Q30 ${2 + yOffset} 36 ${6 + yOffset} Q42 ${10 + yOffset} 48 ${6 + yOffset}`}
-                stroke="#2e2e2e"
+                stroke="var(--solm-text-3)"
                 strokeWidth="1.5"
                 strokeLinecap="round"
                 fill="none"
@@ -94,7 +94,7 @@ export function OnboardingComplete() {
             style={{
               fontSize: '16px',
               fontWeight: 300,
-              color: '#3a3a3a',
+              color: 'var(--solm-text-2)',
               lineHeight: 1.6,
             }}
           >
@@ -110,13 +110,13 @@ export function OnboardingComplete() {
         className="flex flex-col gap-4"
       >
         {saveError ? (
-          <p style={{ fontSize: '13px', color: '#7a4a4a', fontWeight: 300, lineHeight: 1.5 }}>
+          <p style={{ fontSize: '13px', color: 'var(--solm-text-error)', fontWeight: 300, lineHeight: 1.5 }}>
             {saveError}
           </p>
         ) : null}
 
         {!canSave && !saveError ? (
-          <p style={{ fontSize: '13px', color: '#5a5a5a', fontWeight: 300 }}>
+          <p style={{ fontSize: '13px', color: 'var(--solm-text-5)', fontWeight: 300 }}>
             Some answers are missing. Go back and finish the previous steps.
           </p>
         ) : null}

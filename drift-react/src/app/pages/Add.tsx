@@ -56,7 +56,7 @@ export function Add() {
       {/* Back */}
       <button
         onClick={() => navigate(returnTo)}
-        className="text-[#444] hover:text-[#666] transition-colors self-start mb-12"
+        className="text-solm-5 hover:text-solm-2 transition-colors self-start mb-12"
         style={{ fontSize: "13px", letterSpacing: "0.05em" }}
       >
         ← back
@@ -65,7 +65,7 @@ export function Add() {
       {/* Heading */}
       <div className="mb-8">
         <p
-          className="text-[#3a3a3a] tracking-[0.25em] uppercase mb-2"
+          className="text-solm-4 tracking-[0.25em] uppercase mb-2"
           style={{ fontSize: "11px" }}
         >
           new task
@@ -91,7 +91,7 @@ export function Add() {
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Describe your task..."
-          className="flex-1 w-full bg-transparent resize-none text-[#d0d0d0] placeholder-[#2e2e2e] outline-none border-b border-[#1e1e1e] focus:border-[#2e2e2e] transition-colors pb-4"
+          className="flex-1 w-full bg-transparent resize-none text-solm-1 placeholder:text-solm-3 outline-none border-b border-[#1e1e1e] focus:border-solm-3 transition-colors pb-4"
           style={{
             fontSize: "20px",
             fontWeight: 300,
@@ -119,7 +119,7 @@ export function Add() {
           </span>
         </button>
         <p
-          className="text-center text-[#2e2e2e]"
+          className="text-center text-solm-3"
           style={{ fontSize: "11px" }}
         >
           ⌘ + Enter to add
