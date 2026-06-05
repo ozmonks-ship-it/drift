@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { LoginLogoHero } from '../components/LogoLockup';
 
 type LoginErrorProps = {
@@ -6,6 +7,8 @@ type LoginErrorProps = {
 };
 
 export function LoginError({ onGoogle, isSubmitting = false }: LoginErrorProps) {
+  const navigate = useNavigate();
+
   return (
     <div
       className="flex flex-col min-h-[100dvh] px-8 py-12"
@@ -35,6 +38,14 @@ export function LoginError({ onGoogle, isSubmitting = false }: LoginErrorProps) 
         >
           Something went wrong. Please try again.
         </p>
+        <button
+          type="button"
+          onClick={() => navigate('/privacy')}
+          className="text-center transition-colors text-[#252525] hover:text-[#444]"
+          style={{ fontSize: '11px', letterSpacing: '0.06em' }}
+        >
+          Privacy policy
+        </button>
       </div>
     </div>
   );

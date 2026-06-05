@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
+import posthog from 'posthog-js';
 import { TaskProvider } from '../context/TaskContext';
 import { Login } from '../pages/Login';
 import { supabase } from '../../lib/supabase';
 import { AppShell } from './AppShell';
 import { InstallPrompt } from './InstallPrompt';
 
+
+const PUBLIC_PATHS = new Set(['/privacy']);
+
 export function Root() {
+  const location = useLocation();
   const [session, setSession] = useState<Session | null | undefined>(undefined);
 
   useEffect(() => {
@@ -26,6 +31,17 @@ export function Root() {
     };
   }, []);
 
+  useEffect(() => {
+    if (session === undefined) return;        // still loading, do nothing
+    if (session === null) {                   // logged out
+      posthog.reset();
+      return;
+    }
+    posthog.identify(session.user.id, {       // logged in
+      email: session.user.email,
+    });
+  }, [session]);
+
   if (session === undefined) {
     return (
       <AppShell>
@@ -35,6 +51,15 @@ export function Root() {
   }
 
   if (!session) {
+    if (PUBLIC_PATHS.has(location.pathname)) {
+      return (
+        <AppShell>
+          <Outlet />
+          <InstallPrompt />
+        </AppShell>
+      );
+    }
+
     return (
       <AppShell>
         <Login />

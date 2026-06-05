@@ -13,12 +13,14 @@ import { OnboardingRhythm } from './pages/onboarding/OnboardingRhythm';
 import { OnboardingSchedule } from './pages/onboarding/OnboardingSchedule';
 import { OnboardingComplete } from './pages/onboarding/OnboardingComplete';
 import { Settings } from './pages/onboarding/Settings';
+import { Privacy } from './pages/Privacy';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     Component: Root,
     children: [
+      { path: 'privacy', Component: Privacy },
       {
         path: 'onboarding',
         Component: OnboardingLayout,

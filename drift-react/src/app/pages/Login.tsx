@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { LoginLogoHero } from '../components/LogoLockup';
 import { supabase } from '../../lib/supabase';
 import { LoginError } from './LoginError';
 
 export function Login() {
+  const navigate = useNavigate();
   const [hasError, setHasError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -63,6 +65,14 @@ export function Login() {
           <span style={{ fontSize: '16px', fontWeight: 400 }}>
             Continue with Google
           </span>
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate('/privacy')}
+          className="text-center transition-colors text-[#252525] hover:text-[#444]"
+          style={{ fontSize: '11px', letterSpacing: '0.06em' }}
+        >
+          Privacy policy
         </button>
       </div>
     </div>
