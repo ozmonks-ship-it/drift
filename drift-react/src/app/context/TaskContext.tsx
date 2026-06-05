@@ -54,9 +54,18 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     async function fetchTasks() {
       try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) {
+          setTasks([]);
+          return;
+        }
+
         const { data, error } = await supabase
           .from('tasks')
           .select('*')
+          .eq('user_id', user.id)
           .in('status', ['pending', 'working', 'drifted'])
           .order('created_at', { ascending: true });
         if (!error && data) {
@@ -76,9 +85,14 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
 
   const addTask = useCallback(async (description: string) => {
     const trimmed = description.trim();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
     const { data, error } = await supabase
       .from('tasks')
-      .insert({ title: trimmed, status: 'pending', energy: 'medium' })
+      .insert({ title: trimmed, status: 'pending', energy: 'medium', user_id: user.id })
       .select()
       .single();
     if (!error && data) {
@@ -110,8 +124,22 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   }, [tasks]);
 
   const startTask = useCallback(async (id: string) => {
-    await supabase.from('tasks').update({ status: 'working' }).eq('id', id);
-    await supabase.from('tasks').update({ status: 'pending' }).eq('status', 'working').neq('id', id);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase
+      .from('tasks')
+      .update({ status: 'working' })
+      .eq('id', id)
+      .eq('user_id', user.id);
+    await supabase
+      .from('tasks')
+      .update({ status: 'pending' })
+      .eq('status', 'working')
+      .eq('user_id', user.id)
+      .neq('id', id);
     setTasks(prev => prev.map(t => {
       if (t.id === id) return { ...t, status: 'working' };
       if (t.status === 'working') return { ...t, status: 'pending' };
@@ -121,8 +149,17 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const driftTask = useCallback(async (id: string) => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
     const now = new Date().toISOString();
-    await supabase.from('tasks').update({ status: 'pending', created_at: now }).eq('id', id);
+    await supabase
+      .from('tasks')
+      .update({ status: 'pending', created_at: now })
+      .eq('id', id)
+      .eq('user_id', user.id);
     setTasks(prev => prev.map(t =>
       t.id === id ? { ...t, status: 'pending', createdAt: Date.now() } : t
     ));
@@ -133,13 +170,31 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
   }, [sessionDriftedTasks.length]);
 
   const binTask = useCallback(async (id: string) => {
-    await supabase.from('tasks').update({ status: 'binned' }).eq('id', id);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase
+      .from('tasks')
+      .update({ status: 'binned' })
+      .eq('id', id)
+      .eq('user_id', user.id);
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'binned' } : t));
     track('task_binned', { task_id: id });
   }, []);
 
   const completeTask = useCallback(async (id: string) => {
-    await supabase.from('tasks').update({ status: 'completed' }).eq('id', id);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) return;
+
+    await supabase
+      .from('tasks')
+      .update({ status: 'completed' })
+      .eq('id', id)
+      .eq('user_id', user.id);
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'completed' } : t));
     setNextTaskId(prev => (prev === id ? null : prev));
     track('task_completed', { task_id: id });
