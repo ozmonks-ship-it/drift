@@ -66,7 +66,7 @@ export function Login() {
         <button
           type="button"
           onClick={() => navigate('/privacy')}
-          className="text-center transition-colors text-[#252525] hover:text-[#444]"
+          className="text-center transition-colors text-solm-5 hover:text-solm-3"
           style={{ fontSize: '11px', letterSpacing: '0.06em' }}
         >
           Privacy policy

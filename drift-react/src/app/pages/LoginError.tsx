@@ -31,14 +31,14 @@ export function LoginError({ onGoogle, isSubmitting = false }: LoginErrorProps) 
 
         <p
           className="text-center"
-          style={{ fontSize: '13px', color: '#7a4a4a', fontWeight: 300 }}
+          style={{ fontSize: '13px', color: 'var(--solm-text-error)', fontWeight: 300 }}
         >
           Something went wrong. Please try again.
         </p>
         <button
           type="button"
           onClick={() => navigate('/privacy')}
-          className="text-center transition-colors text-[#252525] hover:text-[#444]"
+          className="text-center transition-colors text-solm-5 hover:text-solm-3"
           style={{ fontSize: '11px', letterSpacing: '0.06em' }}
         >
           Privacy policy

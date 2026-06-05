@@ -2,6 +2,17 @@
 
 :root {
   --font-size: 16px;
+
+  /* Text hierarchy on #0c0c0c — all levels meet WCAG AA 4.5:1 for normal text */
+  --solm-bg: #0c0c0c;
+  --solm-text-1: #f2f2f2; /* primary: headings, main content */
+  --solm-text-2: #b3b3b3; /* body: descriptions, previews */
+  --solm-text-3: #9e9e9e; /* labels: section headers, status */
+  --solm-text-4: #8a8a8a; /* muted: hints, secondary buttons */
+  --solm-text-5: #757575; /* subtle: back links, tertiary actions */
+  --solm-text-error: #d08080;
+  --solm-text-accent: #b8a070;
+
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
   --card: #ffffff;
@@ -117,6 +128,13 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-solm-1: var(--solm-text-1);
+  --color-solm-2: var(--solm-text-2);
+  --color-solm-3: var(--solm-text-3);
+  --color-solm-4: var(--solm-text-4);
+  --color-solm-5: var(--solm-text-5);
+  --color-solm-error: var(--solm-text-error);
+  --color-solm-accent: var(--solm-text-accent);
 }
 
 @layer base {
