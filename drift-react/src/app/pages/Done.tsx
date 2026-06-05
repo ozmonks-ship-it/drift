@@ -34,7 +34,7 @@ export function Done() {
           transition={{ duration: 0.4, delay: 0.1, type: 'spring', stiffness: 200 }}
         >
           <motion.span
-            style={{ fontSize: '22px', color: '#888' }}
+            style={{ fontSize: '22px', color: 'var(--solm-text-2)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -49,7 +49,7 @@ export function Done() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <p className="text-[#444] tracking-[0.25em] uppercase mb-2" style={{ fontSize: '11px' }}>
+          <p className="text-solm-5 tracking-[0.25em] uppercase mb-2" style={{ fontSize: '11px' }}>
             completed
           </p>
           <h2 className="text-white" style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.02em' }}>

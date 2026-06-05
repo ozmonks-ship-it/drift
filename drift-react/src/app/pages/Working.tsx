@@ -58,19 +58,19 @@ export function Working() {
       <div className="flex items-center justify-between mb-12">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-          <p className="text-[#3a3a3a]" style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
+          <p className="text-solm-4" style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
             Working
           </p>
         </div>
         <div className="flex items-center gap-4">
           {elapsed > 0 && (
-            <p className="text-[#2e2e2e]" style={{ fontSize: '12px' }}>
+            <p className="text-solm-3" style={{ fontSize: '12px' }}>
               {formatElapsed(elapsed)}
             </p>
           )}
           <button
             onClick={() => navigate('/add', { state: { returnTo: '/working' } })}
-            className="text-[#2e2e2e] hover:text-[#555] transition-colors"
+            className="text-solm-3 hover:text-solm-4 transition-colors"
             style={{ fontSize: '22px', lineHeight: 1 }}
             title="Add a task"
           >
@@ -125,10 +125,10 @@ export function Working() {
         <button
           onClick={handleDrift}
           className="w-full rounded-2xl py-5 px-6 border border-[#242424] hover:border-[#383838] transition-colors flex items-center justify-between"
-          style={{ color: '#666', fontSize: '17px', fontWeight: 400 }}
+          style={{ color: 'var(--solm-text-2)', fontSize: '17px', fontWeight: 400 }}
         >
           <span>Drift</span>
-          <span style={{ color: '#3a3a3a' }}>~</span>
+          <span style={{ color: 'var(--solm-text-4)' }}>~</span>
         </button>
       </motion.div>
     </motion.div>

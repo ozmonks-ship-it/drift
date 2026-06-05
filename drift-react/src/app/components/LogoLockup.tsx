@@ -50,7 +50,7 @@ export function LoginLogoHero({ size = 'lg' }: { size?: SolmLogoSize }) {
           paddingLeft: '68px',
           fontSize: '11px',
           fontWeight: 400,
-          color: '#2e2e2e',
+          color: 'var(--solm-text-3)',
           letterSpacing: '0.3em',
           textTransform: 'uppercase',
         }}
