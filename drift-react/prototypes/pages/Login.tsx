@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router";
 import { LogoLockup } from "../components/LogoLockup";
 
 export function Login() {
+  const navigate = useNavigate();
   return (
     <div
       className="flex flex-col min-h-[100dvh] px-8 py-12"
@@ -34,6 +36,13 @@ export function Login() {
           <span style={{ fontSize: "16px", fontWeight: 400 }}>
             Continue with Google
           </span>
+        </button>
+        <button
+          onClick={() => navigate("/privacy")}
+          className="text-center transition-colors text-[#252525] hover:text-[#444]"
+          style={{ fontSize: "11px", letterSpacing: "0.06em" }}
+        >
+          Privacy policy
         </button>
       </div>
     </div>

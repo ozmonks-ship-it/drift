@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { motion } from 'motion/react';
 
 const PRIORITIES_DATA = ['Family', 'Health & Exercise', 'Side project'];
@@ -43,6 +44,7 @@ function SectionCard({
 }
 
 export function Settings() {
+  const navigate = useNavigate();
   return (
     <motion.div
       className="flex flex-col min-h-[100dvh] px-8 py-12"
@@ -165,13 +167,20 @@ export function Settings() {
         </SectionCard>
       </div>
 
-      {/* Sign out */}
-      <div className="mt-10 flex justify-center">
+      {/* Footer links */}
+      <div className="mt-10 flex flex-col items-center gap-4">
         <button
           className="transition-colors"
           style={{ fontSize: '13px', color: '#2e2e2e', letterSpacing: '0.05em' }}
         >
           Sign out
+        </button>
+        <button
+          onClick={() => navigate('/privacy')}
+          className="transition-colors text-[#1e1e1e] hover:text-[#444]"
+          style={{ fontSize: '11px', letterSpacing: '0.06em' }}
+        >
+          Privacy policy
         </button>
       </div>
     </motion.div>
