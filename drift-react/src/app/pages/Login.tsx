@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { InAppBrowserBanner } from '../components/InAppBrowserBanner';
 import { LoginLogoHero } from '../components/LogoLockup';
+import { isInAppBrowser } from '../../lib/inAppBrowser';
 import { supabase } from '../../lib/supabase';
 import { LoginError } from './LoginError';
 
@@ -38,9 +40,15 @@ export function Login() {
     }
   }, []);
 
+  const inAppBrowser = isInAppBrowser();
+
   if (hasError) {
     return (
-      <LoginError onGoogle={handleGoogle} isSubmitting={isSubmitting} />
+      <LoginError
+        onGoogle={handleGoogle}
+        isSubmitting={isSubmitting}
+        inAppBrowser={inAppBrowser}
+      />
     );
   }
 
@@ -51,9 +59,10 @@ export function Login() {
       </div>
 
       <div className="flex flex-col gap-4">
+        <InAppBrowserBanner />
         <button
           type="button"
-          disabled={isSubmitting}
+          disabled={isSubmitting || inAppBrowser}
           onClick={handleGoogle}
           className="w-full rounded-2xl py-5 px-6 flex items-center justify-center gap-3 transition-opacity active:opacity-80 disabled:opacity-60"
           style={{ background: '#f2f2f2', color: '#0c0c0c' }}
