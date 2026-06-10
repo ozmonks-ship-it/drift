@@ -42,6 +42,10 @@ export function Root() {
     });
   }, [session]);
 
+  useEffect(() => {
+    posthog.capture('$pageview');
+  }, [location.pathname]);
+
   if (session === undefined) {
     return (
       <AppShell>
