@@ -69,7 +69,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
 
           <motion.div
             className="fixed bottom-0 left-0 right-0 z-50"
-            style={{ background: '#141414', borderRadius: '24px 24px 0 0', paddingBottom: '48px' }}
+            style={{ background: 'var(--solm-bg)', borderRadius: '24px 24px 0 0', paddingBottom: '48px', borderTop: '0.5px solid #1e1e1e' }}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
@@ -77,13 +77,13 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
           >
             <div className="flex justify-center pt-3 pb-6">
               <div
-                className="rounded-full"
-                style={{ width: '36px', height: '4px', background: '#252525' }}
+                className="rounded-full bg-[#242424]"
+                style={{ width: '36px', height: '4px' }}
               />
             </div>
 
             <p
-              className="px-8 mb-6 text-white"
+              className="px-8 mb-6 text-solm-1"
               style={{ fontSize: '22px', fontWeight: 300, letterSpacing: '-0.02em' }}
             >
               Right now I'm…
@@ -97,7 +97,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                     <button
                       type="button"
                       onClick={() => handleMomentSelect(opt.id)}
-                      className="w-full flex items-center gap-4 py-4 text-left transition-colors"
+                      className="group w-full flex items-center gap-4 py-4 text-left transition-colors"
                       style={{
                         borderTop: i === 0 ? 'none' : '0.5px solid #1e1e1e',
                       }}
@@ -106,10 +106,10 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                         {opt.emoji}
                       </span>
                       <span
+                        className={isSelected ? 'text-solm-1' : 'text-solm-4 group-hover:text-solm-2'}
                         style={{
                           fontSize: '16px',
                           fontWeight: 300,
-                          color: isSelected ? '#fff' : '#555',
                           letterSpacing: '-0.01em',
                           transition: 'color 0.2s',
                         }}
@@ -117,7 +117,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                         {opt.label}
                       </span>
                       {isSelected && opt.id !== 'other' && (
-                        <span style={{ marginLeft: 'auto', fontSize: '11px', color: '#555' }}>✓</span>
+                        <span className="ml-auto text-solm-3" style={{ fontSize: '11px' }}>✓</span>
                       )}
                     </button>
 
@@ -138,11 +138,10 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                               onChange={e => setCustomText(e.target.value)}
                               onKeyDown={e => e.key === 'Enter' && handleCustomSubmit()}
                               placeholder="Describe where you are…"
-                              className="flex-1 rounded-2xl border border-[#252525] bg-transparent outline-none focus:border-[#3a3a3a] placeholder:text-[#252525]"
+                              className="flex-1 rounded-2xl border border-[#1e1e1e] bg-transparent outline-none transition-colors focus:border-[#333] placeholder:text-solm-5 text-solm-2"
                               style={{
                                 fontSize: '14px',
                                 fontWeight: 300,
-                                color: '#888',
                                 padding: '12px 16px',
                               }}
                             />
