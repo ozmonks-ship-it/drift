@@ -8,7 +8,7 @@ import { fetchUserContext, type UserContext } from '../../lib/userContext';
 type Phase = 'finding' | 'revealing' | 'ready';
 
 function isPickUserMode(v: unknown): v is PickUserMode {
-  return v === 'deep' || v === 'quick';
+  return v === 'deep' || v === 'quick' || v === 'right_now';
 }
 
 /** Resolves pick mode from router state; supports legacy `energy` for in-flight sessions. */
@@ -25,6 +25,7 @@ function pickModeFromLocationState(state: unknown): PickUserMode | null {
 export type NextPickLocationState = {
   finding?: boolean;
   mode?: PickUserMode;
+  moment?: string;
   pickSource?: PickSource;
   pickReasoning?: string | null;
 };
@@ -89,6 +90,10 @@ export function Next() {
       setExiting(null);
       await driftTask(displayTask.id);
       const mode = pickModeFromLocationState(location.state);
+      const moment =
+        location.state && typeof location.state === 'object'
+          ? (location.state as NextPickLocationState).moment
+          : undefined;
       if (mode) {
         const pending = tasks
           .filter(t => t.status === 'pending' && t.id !== displayTask.id);
@@ -99,7 +104,8 @@ export function Next() {
             pending,
             mode,
             [...sessionDriftedTasks, displayTask.description],
-            ctx
+            ctx,
+            moment
           );
           setNextTask(pick.id);
           setPickSource(pick.source);

@@ -35,7 +35,7 @@ MODE CALIBRATION (user-selected per pick):
 - QUICK — fast win: prefer shorter, easier tasks when priorities allow
 `;
 
-export type PickUserMode = 'deep' | 'quick';
+export type PickUserMode = 'deep' | 'quick' | 'right_now';
 
 export type PickSource = 'claude' | 'fallback' | 'single' | 'empty';
 
@@ -45,11 +45,22 @@ export interface PickResult {
   reasoning: string | null;
 }
 
+function modePromptLine(mode: PickUserMode): string {
+  if (mode === 'deep') {
+    return "The user's mode is: DEEP. IMPORTANT: Always respect life priorities first — family tasks must never be skipped regardless of mode. Use mode only to calibrate effort: DEEP means the user has time and focus for meaningful tasks.";
+  }
+  if (mode === 'quick') {
+    return "The user's mode is: QUICK. IMPORTANT: Always respect life priorities first — family tasks must never be skipped regardless of mode. Use mode only to calibrate effort: QUICK means the user wants a fast win — prefer shorter, easier tasks but still respect priority order.";
+  }
+  return "The user's mode is: RIGHT NOW. IMPORTANT: Always respect life priorities first — family tasks must never be skipped regardless of mode. Calibrate to their current context and moment — prefer tasks that fit where they are right now.";
+}
+
 export async function pickNextTask(
   tasks: { id: string; description: string }[],
   mode: PickUserMode,
   driftedTasks?: string[],
-  userContext?: UserContext | null
+  userContext?: UserContext | null,
+  momentContext?: string
 ): Promise<PickResult> {
   if (tasks.length === 0) return { id: null, source: 'empty', reasoning: null };
   if (tasks.length === 1) return { id: tasks[0].id, source: 'single', reasoning: null };
@@ -60,6 +71,10 @@ export async function pickNextTask(
 
   const driftedContext = driftedTasks && driftedTasks.length > 0
     ? `\nI don't want to tackle these right now:\n${driftedTasks.map(d => `- "${d}"`).join('\n')}\n`
+    : '';
+
+  const momentLine = momentContext
+    ? `\nThe user is currently: ${momentContext}. Only recommend tasks appropriate for this context — avoid tasks requiring physical presence at home or sustained focus if they're mobile or in transit.\n`
     : '';
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -78,8 +93,8 @@ export async function pickNextTask(
         {
           role: 'user',
           content: `The current time is ${new Date().toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit', hour12: true })} on ${new Date().toLocaleDateString('en-AU', { weekday: 'long' })}.
-The user's mode is: ${mode === 'deep' ? 'DEEP' : 'QUICK'}. IMPORTANT: Always respect life priorities first — family tasks must never be skipped regardless of mode. Use mode only to calibrate effort: DEEP means the user has time and focus for meaningful tasks. QUICK means the user wants a fast win — prefer shorter, easier tasks but still respect priority order.
-${driftedContext}
+${modePromptLine(mode)}
+${momentLine}${driftedContext}
 Here are my pending tasks:
 ${taskList}
 

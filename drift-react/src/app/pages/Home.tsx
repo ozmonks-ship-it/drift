@@ -2,7 +2,9 @@ import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { useTaskContext } from "../context/TaskContext";
 import React, { useState } from "react";
+import posthog from "posthog-js";
 import { SolmLogo } from "../components/SolmLogo";
+import { MomentPicker, PRESET_MOMENT_LABELS } from "../components/MomentPicker";
 import { pickNextTask, type PickUserMode } from "../../lib/claude";
 import { fetchUserContext, type UserContext } from "../../lib/userContext";
 
@@ -11,6 +13,7 @@ export function Home() {
   const { pendingCount, getWorkingTask, tasks, setNextTask, setIsPickingNextTask, clearSessionDriftedTasks, isLoadingTasks } = useTaskContext();
   const workingTask = getWorkingTask();
   const [showMode, setShowMode] = useState(false);
+  const [showMomentPicker, setShowMomentPicker] = useState(false);
   const [selectedMode, setSelectedMode] = useState<PickUserMode | null>(null);
   const [userContext, setUserContext] = useState<UserContext | null>(null);
 
@@ -43,9 +46,39 @@ export function Home() {
     }
   };
 
+  const handleMomentSelect = async (moment: string) => {
+    const momentType = PRESET_MOMENT_LABELS.includes(moment) ? 'preset' : 'freeform';
+    try {
+      posthog.capture('moment_selected', {
+        moment_type: momentType,
+        moment_value: moment,
+        mode: 'right_now',
+      });
+    } catch {
+      // ignore — PostHog may not be initialised in dev
+    }
+
+    const mode: PickUserMode = 'right_now';
+    setSelectedMode(mode);
+    const pending = tasks.filter(t => t.status === 'pending');
+    setIsPickingNextTask(true);
+    navigate("/next", { state: { finding: true, mode, moment } });
+    try {
+      const pick = await pickNextTask(pending, mode, undefined, userContext, moment);
+      setNextTask(pick.id);
+      navigate("/next", {
+        state: { finding: true, mode, moment, pickSource: pick.source, pickReasoning: pick.reasoning },
+        replace: true,
+      });
+    } finally {
+      setIsPickingNextTask(false);
+    }
+  };
+
   const modeOptions: { label: string; value: PickUserMode }[] = [
     { label: "☀️ Let's go", value: "deep" },
     { label: "⚡ Quick one", value: "quick" },
+    { label: "📍 Right now I'm…", value: "right_now" },
   ];
 
   return (
@@ -178,7 +211,13 @@ export function Home() {
                   return (
                     <motion.button
                       key={option.value}
-                      onClick={() => handleModeSelect(option.value)}
+                      onClick={() => {
+                        if (option.value === 'right_now') {
+                          setShowMomentPicker(true);
+                          return;
+                        }
+                        handleModeSelect(option.value);
+                      }}
                       disabled={selectedMode !== null}
                       initial={{ opacity: 0, y: 8 }}
                       animate={{
@@ -262,6 +301,11 @@ export function Home() {
       )}
     </motion.div>
       )}
+      <MomentPicker
+        open={showMomentPicker}
+        onClose={() => setShowMomentPicker(false)}
+        onSelect={handleMomentSelect}
+      />
     </AnimatePresence>
   );
 }
