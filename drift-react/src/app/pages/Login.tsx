@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { InAppBrowserBanner } from '../components/InAppBrowserBanner';
-import { LoginLogoHero } from '../components/LogoLockup';
+import { SolmMark } from '../components/SolmLogo';
 import { isInAppBrowser } from '../../lib/inAppBrowser';
 import { supabase } from '../../lib/supabase';
 import { LoginError } from './LoginError';
@@ -42,6 +42,10 @@ export function Login() {
 
   const inAppBrowser = isInAppBrowser();
 
+  const scrollToSignIn = () => {
+    document.getElementById('sign-in')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   if (hasError) {
     return (
       <LoginError
@@ -53,33 +57,344 @@ export function Login() {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh] px-8 py-12">
-      <div className="flex-1 flex flex-col justify-center">
-        <LoginLogoHero />
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <InAppBrowserBanner />
+    <div className="flex flex-col min-h-[100dvh]" style={{ background: '#0c0c0c' }}>
+      <nav
+        className="flex items-center justify-between px-6 py-4 sticky top-0 z-10"
+        style={{ borderBottom: '0.5px solid #1a1a1a', background: '#0c0c0c' }}
+      >
+        <div className="flex items-center gap-2 text-solm-1">
+          <SolmMark size="sm" />
+          <span style={{ fontSize: '15px', fontWeight: 400, letterSpacing: '-0.02em' }}>
+            solm
+          </span>
+          <span
+            className="border rounded-full px-2 py-0.5 text-solm-3"
+            style={{
+              fontSize: '9px',
+              borderColor: '#1e1e1e',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Beta
+          </span>
+        </div>
         <button
           type="button"
-          disabled={isSubmitting || inAppBrowser}
-          onClick={handleGoogle}
-          className="w-full rounded-2xl py-5 px-6 flex items-center justify-center gap-3 transition-opacity active:opacity-80 disabled:opacity-60"
-          style={{ background: '#f2f2f2', color: '#0c0c0c' }}
+          onClick={scrollToSignIn}
+          className="border rounded-xl px-4 py-1.5 transition-colors text-solm-5 hover:text-solm-3 hover:border-[#333]"
+          style={{ fontSize: '13px', borderColor: '#1e1e1e' }}
         >
-          <GoogleIcon />
-          <span style={{ fontSize: '16px', fontWeight: 400 }}>
-            Continue with Google
-          </span>
+          Sign in
         </button>
+      </nav>
+
+      <section
+        className="px-6 pt-14 pb-12 flex flex-col items-center text-center"
+        style={{ borderBottom: '0.5px solid #1a1a1a' }}
+      >
+        <h1
+          className="text-solm-1 mb-3"
+          style={{ fontSize: '44px', fontWeight: 500, letterSpacing: '-0.03em', lineHeight: 1.1 }}
+        >
+          The one thing.
+        </h1>
+        <p
+          className="text-solm-2 mb-8"
+          style={{ fontSize: '16px', fontWeight: 300, lineHeight: 1.7, maxWidth: '300px' }}
+        >
+          A focus app that picks your next task — no lists to sort, no decisions to make.
+        </p>
+
+        <div className="w-full max-w-[320px] flex flex-col gap-3">
+          <InAppBrowserBanner />
+          <button
+            type="button"
+            disabled={isSubmitting || inAppBrowser}
+            onClick={handleGoogle}
+            className="flex items-center justify-center gap-3 rounded-2xl px-6 py-4 transition-opacity active:opacity-80 disabled:opacity-60"
+            style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '15px', fontWeight: 500 }}
+          >
+            <GoogleIcon />
+            Continue with Google
+          </button>
+        </div>
+        <p
+          className="text-solm-4"
+          style={{ fontSize: '12px', marginTop: '12px', fontWeight: 300 }}
+        >
+          New to Solm? You&apos;ll join the beta queue.
+        </p>
+
+        <PhoneMockup />
+      </section>
+
+      <section className="px-6 py-12" style={{ borderBottom: '0.5px solid #1a1a1a' }}>
+        <p
+          className="text-solm-3 tracking-[0.2em] uppercase mb-6"
+          style={{ fontSize: '11px' }}
+        >
+          How it works
+        </p>
+        <div className="flex flex-col gap-4">
+          {[
+            {
+              n: '01',
+              title: 'Capture tasks',
+              body: 'Add anything on your mind. Work, personal, errands — all in one place.',
+            },
+            {
+              n: '02',
+              title: 'Pick your pace',
+              body: 'Got time? Or just a few minutes? Solm adjusts to your energy level.',
+            },
+            {
+              n: '03',
+              title: 'Solm picks one',
+              body: 'AI surfaces the single best next task. Do it, then get the next one.',
+            },
+          ].map(({ n, title, body }) => (
+            <div
+              key={n}
+              className="rounded-2xl p-5"
+              style={{ background: '#0f0f0f', border: '0.5px solid #1a1a1a' }}
+            >
+              <p
+                className="text-solm-3"
+                style={{ fontSize: '11px', marginBottom: '8px', letterSpacing: '0.05em' }}
+              >
+                {n}
+              </p>
+              <p
+                className="text-solm-2"
+                style={{ fontSize: '14px', fontWeight: 400, marginBottom: '6px' }}
+              >
+                {title}
+              </p>
+              <p
+                className="text-solm-2"
+                style={{ fontSize: '13px', fontWeight: 300, lineHeight: 1.6 }}
+              >
+                {body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="px-6 py-12" style={{ borderBottom: '0.5px solid #1a1a1a' }}>
+        <p
+          className="text-solm-3 tracking-[0.2em] uppercase mb-6"
+          style={{ fontSize: '11px' }}
+        >
+          Why Solm
+        </p>
+        <div className="flex flex-col gap-3">
+          {[
+            {
+              title: 'No decision fatigue',
+              body: 'Stop staring at your list. One task, then the next.',
+            },
+            {
+              title: 'Priority-aware',
+              body: 'Knows what matters to you — family, health, work — and picks accordingly.',
+            },
+            {
+              title: 'Works anywhere',
+              body: 'Install as an app on iPhone, Android, or desktop. No App Store needed.',
+            },
+          ].map(({ title, body }) => (
+            <div
+              key={title}
+              className="rounded-2xl p-5"
+              style={{ border: '0.5px solid #1a1a1a' }}
+            >
+              <p
+                className="text-solm-4"
+                style={{ fontSize: '14px', fontWeight: 400, marginBottom: '4px' }}
+              >
+                {title}
+              </p>
+              <p
+                className="text-solm-2"
+                style={{ fontSize: '13px', fontWeight: 300, lineHeight: 1.6 }}
+              >
+                {body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="sign-in" className="px-6 py-12" style={{ borderBottom: '0.5px solid #1a1a1a' }}>
+        <div
+          className="rounded-2xl p-8 flex flex-col items-center text-center"
+          style={{ background: '#0f0f0f', border: '0.5px solid #1a1a1a' }}
+        >
+          <h2
+            className="text-solm-1 mb-2"
+            style={{ fontSize: '20px', fontWeight: 400, letterSpacing: '-0.01em' }}
+          >
+            Already on Solm?
+          </h2>
+          <p
+            className="text-solm-2 mb-6"
+            style={{ fontSize: '14px', fontWeight: 300, lineHeight: 1.6 }}
+          >
+            Sign in with the same Google account you used to join.
+          </p>
+          <div className="w-full flex flex-col gap-3">
+            <InAppBrowserBanner />
+            <button
+              type="button"
+              disabled={isSubmitting || inAppBrowser}
+              onClick={handleGoogle}
+              className="flex items-center justify-center gap-3 rounded-2xl px-5 py-3.5 transition-colors hover:border-[#333] disabled:opacity-60"
+              style={{
+                border: '0.5px solid #242424',
+                background: '#0c0c0c',
+                fontSize: '14px',
+                fontWeight: 400,
+              }}
+            >
+              <GoogleIcon />
+              <span className="text-solm-4">Sign in with Google</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <footer className="px-6 py-6 flex items-center justify-between">
+        <p className="text-solm-5" style={{ fontSize: '12px', fontWeight: 300 }}>
+          Solm · Beta · Made by Oz
+        </p>
         <button
           type="button"
           onClick={() => navigate('/privacy')}
-          className="text-center transition-colors text-solm-5 hover:text-solm-3"
-          style={{ fontSize: '11px', letterSpacing: '0.06em' }}
+          className="transition-colors text-solm-5 hover:text-solm-3"
+          style={{ fontSize: '12px' }}
         >
-          Privacy policy
+          Privacy
         </button>
+      </footer>
+    </div>
+  );
+}
+
+function PhoneMockup() {
+  return (
+    <div
+      className="mt-12 flex flex-col text-left"
+      style={{
+        width: '158px',
+        height: '335px',
+        background: '#0c0c0c',
+        border: '1.5px solid #2a2a2a',
+        borderRadius: '26px',
+        boxShadow: '0 0 0 5px #111, 0 28px 56px rgba(0,0,0,0.7)',
+        overflow: 'hidden',
+        flexShrink: 0,
+      }}
+    >
+      <div
+        className="flex items-center justify-between px-4"
+        style={{ paddingTop: '10px', paddingBottom: '4px', flexShrink: 0 }}
+      >
+        <span
+          className="text-solm-4"
+          style={{ fontSize: '7px', fontWeight: 500, letterSpacing: '0.02em' }}
+        >
+          9:41
+        </span>
+        <div
+          style={{
+            width: '7px',
+            height: '7px',
+            borderRadius: '50%',
+            background: '#1a1a1a',
+            border: '0.5px solid #333',
+          }}
+        />
+        <div className="flex items-center gap-[3px] text-solm-4">
+          <svg width="9" height="7" viewBox="0 0 9 7" fill="none" aria-hidden>
+            <rect x="0" y="2" width="7" height="5" rx="1" fill="currentColor" />
+            <rect x="7.5" y="3" width="1.5" height="3" rx="0.5" fill="currentColor" />
+          </svg>
+          <svg width="10" height="7" viewBox="0 0 10 7" fill="none" aria-hidden>
+            <path
+              d="M5 1L9 7H1L5 1Z"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinejoin="round"
+            />
+            <circle cx="5" cy="4.5" r="1.2" fill="currentColor" />
+          </svg>
+        </div>
+      </div>
+
+      <div className="px-4 pt-1 pb-1" style={{ flexShrink: 0 }}>
+        <span
+          className="text-solm-5"
+          style={{ fontSize: '7px', letterSpacing: '0.04em' }}
+        >
+          ← back
+        </span>
+      </div>
+
+      <div className="flex-1 flex flex-col justify-center items-start px-4">
+        <p
+          className="text-solm-3 tracking-[0.22em] uppercase"
+          style={{ fontSize: '6px', marginBottom: '9px' }}
+        >
+          up next
+        </p>
+        <p
+          className="text-solm-1"
+          style={{
+            fontSize: '14px',
+            fontWeight: 300,
+            lineHeight: 1.45,
+            letterSpacing: '-0.01em',
+            marginBottom: '10px',
+          }}
+        >
+          Book dentist appointment
+        </p>
+        <span
+          className="text-solm-5"
+          style={{ fontSize: '6px', letterSpacing: '0.1em' }}
+        >
+          why this? ↓
+        </span>
+      </div>
+
+      <div className="px-4 pb-6 flex flex-col gap-[7px]" style={{ flexShrink: 0 }}>
+        <div
+          className="w-full rounded-xl flex items-center justify-between px-3"
+          style={{ background: '#f2f2f2', height: '28px' }}
+        >
+          <span style={{ fontSize: '10px', fontWeight: 400, color: '#0c0c0c' }}>Start</span>
+          <span style={{ fontSize: '9px', color: '#0c0c0c', opacity: 0.4 }}>→</span>
+        </div>
+        <div className="flex gap-[6px]">
+          <div
+            className="flex-1 rounded-xl flex items-center px-2.5"
+            style={{ border: '0.5px solid #242424', height: '26px' }}
+          >
+            <span className="text-solm-5" style={{ fontSize: '8px' }}>
+              Drift ~
+            </span>
+          </div>
+          <div
+            className="flex-1 rounded-xl flex items-center px-2.5"
+            style={{ border: '0.5px solid #1e1e1e', height: '26px' }}
+          >
+            <span className="text-solm-5" style={{ fontSize: '8px' }}>
+              Bin ×
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -88,11 +403,12 @@ export function Login() {
 function GoogleIcon() {
   return (
     <svg
-      width="18"
-      height="18"
+      width="16"
+      height="16"
       viewBox="0 0 18 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
     >
       <path
         d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"
