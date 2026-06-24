@@ -80,7 +80,7 @@ export function OnboardingComplete() {
           transition={{ duration: 0.5, delay: 0.5 }}
         >
           <h1
-            className="text-white mb-4"
+            className="text-solm-1 mb-4"
             style={{
               fontSize: '48px',
               fontWeight: 300,
@@ -125,8 +125,8 @@ export function OnboardingComplete() {
           type="button"
           disabled={isSaving || !canSave}
           onClick={handleStart}
-          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-opacity active:opacity-80 disabled:opacity-60"
-          style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
+          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-opacity active:opacity-80 disabled:opacity-60 bg-solm-cta-bg text-solm-cta-fg"
+          style={{ fontSize: '17px', fontWeight: 400 }}
         >
           <span>{isSaving ? 'Saving…' : 'Start drifting'}</span>
           <span>→</span>

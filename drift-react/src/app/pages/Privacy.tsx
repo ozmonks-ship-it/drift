@@ -34,7 +34,7 @@ export function Privacy() {
             Legal
           </p>
           <h1
-            className="text-white mb-2"
+            className="text-solm-1 mb-2"
             style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.02em' }}
           >
             Privacy at Solm
@@ -132,7 +132,7 @@ export function Privacy() {
             To run Solm, we use a small set of third-party services. Each one sees a specific
             slice of your data:
           </p>
-          <div className="rounded-2xl border border-[#1a1a1a] overflow-hidden">
+          <div className="rounded-2xl border border-solm-border overflow-hidden">
             {[
               ['Google (sign-in)', 'Name, email', 'United States'],
               ['Supabase', 'Account info, tasks, personal context', 'United States'],
@@ -142,7 +142,7 @@ export function Privacy() {
             ].map(([service, data, location], i, arr) => (
               <div
                 key={service}
-                className={`px-5 py-4 flex flex-col gap-1 ${i < arr.length - 1 ? 'border-b border-[#1a1a1a]' : ''}`}
+                className={`px-5 py-4 flex flex-col gap-1 ${i < arr.length - 1 ? 'border-b border-solm-border' : ''}`}
               >
                 <p style={{ fontSize: '13px', color: 'var(--solm-text-2)', fontWeight: 400 }}>{service}</p>
                 <p style={{ fontSize: '12px', fontWeight: 300, color: 'var(--solm-text-5)', lineHeight: 1.5 }}>

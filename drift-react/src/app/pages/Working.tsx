@@ -82,7 +82,7 @@ export function Working() {
       {/* Task */}
       <div className="flex-1 flex flex-col justify-center">
         <motion.p
-          className="text-white"
+          className="text-solm-1"
           style={{ fontSize: '28px', fontWeight: 300, letterSpacing: '-0.01em', lineHeight: 1.4 }}
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,10 +98,10 @@ export function Working() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.2 }}
           >
-            <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center">
-              <span style={{ fontSize: '12px', color: '#0c0c0c' }}>✓</span>
+            <div className="w-6 h-6 rounded-full bg-solm-cta-bg flex items-center justify-center">
+              <span className="text-solm-cta-fg" style={{ fontSize: '12px' }}>✓</span>
             </div>
-            <p className="text-white" style={{ fontSize: '15px' }}>Done.</p>
+            <p className="text-solm-1" style={{ fontSize: '15px' }}>Done.</p>
           </motion.div>
         )}
       </div>
@@ -115,8 +115,8 @@ export function Working() {
       >
         <button
           onClick={handleComplete}
-          className="w-full rounded-2xl py-5 px-6 transition-all duration-200 hover:opacity-90 flex items-center justify-between"
-          style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
+          className="w-full rounded-2xl py-5 px-6 transition-all duration-200 hover:opacity-90 flex items-center justify-between bg-solm-cta-bg text-solm-cta-fg"
+          style={{ fontSize: '17px', fontWeight: 400 }}
         >
           <span>Done</span>
           <span>✓</span>
@@ -124,7 +124,7 @@ export function Working() {
 
         <button
           onClick={handleDrift}
-          className="w-full rounded-2xl py-5 px-6 border border-[#242424] hover:border-[#383838] transition-colors flex items-center justify-between"
+          className="w-full rounded-2xl py-5 px-6 border border-solm-border-strong hover:border-solm-border-active transition-colors flex items-center justify-between"
           style={{ color: 'var(--solm-text-2)', fontSize: '17px', fontWeight: 400 }}
         >
           <span>Drift</span>

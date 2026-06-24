@@ -69,7 +69,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
 
           <motion.div
             className="fixed bottom-0 left-0 right-0 z-50"
-            style={{ background: 'var(--solm-bg)', borderRadius: '24px 24px 0 0', paddingBottom: '48px', borderTop: '0.5px solid #1e1e1e' }}
+            style={{ background: 'var(--solm-bg)', borderRadius: '24px 24px 0 0', paddingBottom: '48px', borderTop: '0.5px solid var(--solm-border-strong)' }}
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
@@ -77,7 +77,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
           >
             <div className="flex justify-center pt-3 pb-6">
               <div
-                className="rounded-full bg-[#242424]"
+                className="rounded-full bg-solm-border-strong"
                 style={{ width: '36px', height: '4px' }}
               />
             </div>
@@ -99,7 +99,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                       onClick={() => handleMomentSelect(opt.id)}
                       className="group w-full flex items-center gap-4 py-4 text-left transition-colors"
                       style={{
-                        borderTop: i === 0 ? 'none' : '0.5px solid #1e1e1e',
+                        borderTop: i === 0 ? 'none' : '0.5px solid var(--solm-border-strong)',
                       }}
                     >
                       <span style={{ fontSize: '20px', lineHeight: 1, width: '26px', flexShrink: 0 }}>
@@ -138,7 +138,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                               onChange={e => setCustomText(e.target.value)}
                               onKeyDown={e => e.key === 'Enter' && handleCustomSubmit()}
                               placeholder="Describe where you are…"
-                              className="flex-1 rounded-2xl border border-[#1e1e1e] bg-transparent outline-none transition-colors focus:border-[#333] placeholder:text-solm-5 text-solm-2"
+                              className="flex-1 rounded-2xl border border-solm-border-strong bg-transparent outline-none transition-colors focus:border-solm-border-focus placeholder:text-solm-5 text-solm-2"
                               style={{
                                 fontSize: '14px',
                                 fontWeight: 300,
@@ -149,8 +149,8 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                               type="button"
                               onClick={handleCustomSubmit}
                               disabled={!customText.trim()}
-                              className="rounded-2xl px-4 transition-opacity disabled:opacity-20 active:opacity-70"
-                              style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '14px', fontWeight: 400 }}
+                              className="rounded-2xl px-4 transition-opacity disabled:opacity-20 active:opacity-70 bg-solm-cta-bg text-solm-cta-fg"
+                              style={{ fontSize: '14px', fontWeight: 400 }}
                             >
                               Go →
                             </button>

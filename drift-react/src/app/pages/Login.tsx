@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { InAppBrowserBanner } from '../components/InAppBrowserBanner';
 import { SolmMark } from '../components/SolmLogo';
+import { ThemeToggle } from '../components/ThemeToggle';
 import { isInAppBrowser } from '../../lib/inAppBrowser';
 import { supabase } from '../../lib/supabase';
 import { LoginError } from './LoginError';
@@ -57,10 +58,9 @@ export function Login() {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh]" style={{ background: '#0c0c0c' }}>
+    <div className="flex flex-col min-h-[100dvh] bg-solm-bg">
       <nav
-        className="flex items-center justify-between px-6 py-4 sticky top-0 z-10"
-        style={{ borderBottom: '0.5px solid #1a1a1a', background: '#0c0c0c' }}
+        className="flex items-center justify-between px-6 py-4 sticky top-0 z-10 bg-solm-bg border-b border-solm-border"
       >
         <div className="flex items-center gap-2 text-solm-1">
           <SolmMark size="sm" />
@@ -68,10 +68,9 @@ export function Login() {
             solm
           </span>
           <span
-            className="border rounded-full px-2 py-0.5 text-solm-3"
+            className="border border-solm-border-strong rounded-full px-2 py-0.5 text-solm-3"
             style={{
               fontSize: '9px',
-              borderColor: '#1e1e1e',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
             }}
@@ -79,19 +78,21 @@ export function Login() {
             Beta
           </span>
         </div>
-        <button
-          type="button"
-          onClick={scrollToSignIn}
-          className="border rounded-xl px-4 py-1.5 transition-colors text-solm-5 hover:text-solm-3 hover:border-[#333]"
-          style={{ fontSize: '13px', borderColor: '#1e1e1e' }}
-        >
-          Sign in
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={scrollToSignIn}
+            className="border border-solm-border-strong rounded-xl px-4 py-1.5 transition-colors text-solm-5 hover:text-solm-3 hover:border-solm-border-hover"
+            style={{ fontSize: '13px' }}
+          >
+            Sign in
+          </button>
+        </div>
       </nav>
 
       <section
-        className="px-6 pt-14 pb-12 flex flex-col items-center text-center"
-        style={{ borderBottom: '0.5px solid #1a1a1a' }}
+        className="px-6 pt-14 pb-12 flex flex-col items-center text-center border-b border-solm-border"
       >
         <h1
           className="text-solm-1 mb-3"
@@ -112,8 +113,8 @@ export function Login() {
             type="button"
             disabled={isSubmitting || inAppBrowser}
             onClick={handleGoogle}
-            className="flex items-center justify-center gap-3 rounded-2xl px-6 py-4 transition-opacity active:opacity-80 disabled:opacity-60"
-            style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '15px', fontWeight: 500 }}
+            className="flex items-center justify-center gap-3 rounded-2xl px-6 py-4 transition-opacity active:opacity-80 disabled:opacity-60 bg-solm-cta-bg text-solm-cta-fg"
+            style={{ fontSize: '15px', fontWeight: 500 }}
           >
             <GoogleIcon />
             Continue with Google
@@ -129,7 +130,7 @@ export function Login() {
         <PhoneMockup />
       </section>
 
-      <section className="px-6 py-12" style={{ borderBottom: '0.5px solid #1a1a1a' }}>
+      <section className="px-6 py-12 border-b border-solm-border">
         <p
           className="text-solm-3 tracking-[0.2em] uppercase mb-6"
           style={{ fontSize: '11px' }}
@@ -156,8 +157,7 @@ export function Login() {
           ].map(({ n, title, body }) => (
             <div
               key={n}
-              className="rounded-2xl p-5"
-              style={{ background: '#0f0f0f', border: '0.5px solid #1a1a1a' }}
+              className="rounded-2xl p-5 bg-solm-surface border border-solm-border"
             >
               <p
                 className="text-solm-3"
@@ -182,7 +182,7 @@ export function Login() {
         </div>
       </section>
 
-      <section className="px-6 py-12" style={{ borderBottom: '0.5px solid #1a1a1a' }}>
+      <section className="px-6 py-12 border-b border-solm-border">
         <p
           className="text-solm-3 tracking-[0.2em] uppercase mb-6"
           style={{ fontSize: '11px' }}
@@ -206,8 +206,7 @@ export function Login() {
           ].map(({ title, body }) => (
             <div
               key={title}
-              className="rounded-2xl p-5"
-              style={{ border: '0.5px solid #1a1a1a' }}
+              className="rounded-2xl p-5 border border-solm-border"
             >
               <p
                 className="text-solm-4"
@@ -226,10 +225,9 @@ export function Login() {
         </div>
       </section>
 
-      <section id="sign-in" className="px-6 py-12" style={{ borderBottom: '0.5px solid #1a1a1a' }}>
+      <section id="sign-in" className="px-6 py-12 border-b border-solm-border">
         <div
-          className="rounded-2xl p-8 flex flex-col items-center text-center"
-          style={{ background: '#0f0f0f', border: '0.5px solid #1a1a1a' }}
+          className="rounded-2xl p-8 flex flex-col items-center text-center bg-solm-surface border border-solm-border"
         >
           <h2
             className="text-solm-1 mb-2"
@@ -249,10 +247,8 @@ export function Login() {
               type="button"
               disabled={isSubmitting || inAppBrowser}
               onClick={handleGoogle}
-              className="flex items-center justify-center gap-3 rounded-2xl px-5 py-3.5 transition-colors hover:border-[#333] disabled:opacity-60"
+              className="flex items-center justify-center gap-3 rounded-2xl px-5 py-3.5 transition-colors hover:border-solm-border-hover disabled:opacity-60 border border-solm-border-strong bg-solm-bg"
               style={{
-                border: '0.5px solid #242424',
-                background: '#0c0c0c',
                 fontSize: '14px',
                 fontWeight: 400,
               }}
@@ -288,10 +284,10 @@ function PhoneMockup() {
       style={{
         width: '158px',
         height: '335px',
-        background: '#0c0c0c',
-        border: '1.5px solid #2a2a2a',
+        background: 'var(--solm-mockup-bezel)',
+        border: '1.5px solid var(--solm-border-muted)',
         borderRadius: '26px',
-        boxShadow: '0 0 0 5px #111, 0 28px 56px rgba(0,0,0,0.7)',
+        boxShadow: '0 0 0 5px var(--solm-mockup-ring), 0 28px 56px var(--solm-shadow)',
         overflow: 'hidden',
         flexShrink: 0,
       }}
@@ -311,8 +307,8 @@ function PhoneMockup() {
             width: '7px',
             height: '7px',
             borderRadius: '50%',
-            background: '#1a1a1a',
-            border: '0.5px solid #333',
+            background: 'var(--solm-mockup-notch)',
+            border: '0.5px solid var(--solm-border-hover)',
           }}
         />
         <div className="flex items-center gap-[3px] text-solm-4">
@@ -371,24 +367,24 @@ function PhoneMockup() {
 
       <div className="px-4 pb-6 flex flex-col gap-[7px]" style={{ flexShrink: 0 }}>
         <div
-          className="w-full rounded-xl flex items-center justify-between px-3"
-          style={{ background: '#f2f2f2', height: '28px' }}
+          className="w-full rounded-xl flex items-center justify-between px-3 bg-solm-cta-bg"
+          style={{ height: '28px' }}
         >
-          <span style={{ fontSize: '10px', fontWeight: 400, color: '#0c0c0c' }}>Start</span>
-          <span style={{ fontSize: '9px', color: '#0c0c0c', opacity: 0.4 }}>→</span>
+          <span className="text-solm-cta-fg" style={{ fontSize: '10px', fontWeight: 400 }}>Start</span>
+          <span className="text-solm-cta-fg opacity-40" style={{ fontSize: '9px' }}>→</span>
         </div>
         <div className="flex gap-[6px]">
           <div
-            className="flex-1 rounded-xl flex items-center px-2.5"
-            style={{ border: '0.5px solid #242424', height: '26px' }}
+            className="flex-1 rounded-xl flex items-center px-2.5 border border-solm-border-strong"
+            style={{ height: '26px' }}
           >
             <span className="text-solm-5" style={{ fontSize: '8px' }}>
               Drift ~
             </span>
           </div>
           <div
-            className="flex-1 rounded-xl flex items-center px-2.5"
-            style={{ border: '0.5px solid #1e1e1e', height: '26px' }}
+            className="flex-1 rounded-xl flex items-center px-2.5 border border-solm-border-strong"
+            style={{ height: '26px' }}
           >
             <span className="text-solm-5" style={{ fontSize: '8px' }}>
               Bin ×

@@ -28,7 +28,7 @@ export function Done() {
       >
         {/* Checkmark circle */}
         <motion.div
-          className="w-16 h-16 rounded-full border border-[#2a2a2a] flex items-center justify-center"
+          className="w-16 h-16 rounded-full border border-solm-border-muted flex items-center justify-center"
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.1, type: 'spring', stiffness: 200 }}
@@ -52,7 +52,7 @@ export function Done() {
           <p className="text-solm-5 tracking-[0.25em] uppercase mb-2" style={{ fontSize: '11px' }}>
             completed
           </p>
-          <h2 className="text-white" style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.02em' }}>
+          <h2 className="text-solm-1" style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.02em' }}>
             Nice work.
           </h2>
         </motion.div>

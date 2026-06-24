@@ -1,9 +1,25 @@
 
   <!DOCTYPE html>
-  <html lang="en" class="dark">
+  <html lang="en">
     <head>
+      <script>
+        (function () {
+          var storageKey = 'solm.theme';
+          var stored = localStorage.getItem(storageKey);
+          var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var resolved = systemDark ? 'dark' : 'light';
+          if (stored === 'light' || stored === 'dark') {
+            resolved = stored;
+          } else if (stored === 'system') {
+            resolved = systemDark ? 'dark' : 'light';
+          }
+          document.documentElement.classList.add(resolved);
+          document.documentElement.style.colorScheme = resolved;
+          document.documentElement.style.backgroundColor = resolved === 'dark' ? '#0c0c0c' : '#fafafa';
+        })();
+      </script>
       <link rel="manifest" href="/manifest.json">
-      <meta name="theme-color" content="#0c0c0c">
+      <meta name="theme-color" content="#fafafa">
       <meta name="mobile-web-app-capable" content="yes">
       <meta name="apple-mobile-web-app-capable" content="yes">
       <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -26,7 +42,7 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>solm - the one thing</title>
-      <style>html, body { height: 100%; margin: 0; background-color: #0c0c0c; } #root { height: 100%; }</style>
+      <style>html, body { height: 100%; margin: 0; background-color: var(--solm-bg, #fafafa); } #root { height: 100%; }</style>
     </head>
 
     <body>

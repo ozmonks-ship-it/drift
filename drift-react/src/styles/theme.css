@@ -3,15 +3,35 @@
 :root {
   --font-size: 16px;
 
-  /* Text hierarchy on #0c0c0c — all levels meet WCAG AA 4.5:1 for normal text */
-  --solm-bg: #0c0c0c;
-  --solm-text-1: #f2f2f2; /* primary: headings, main content */
-  --solm-text-2: #b3b3b3; /* body: descriptions, previews */
-  --solm-text-3: #9e9e9e; /* labels: section headers, status */
-  --solm-text-4: #8a8a8a; /* muted: hints, secondary buttons */
+  /* Light mode — text hierarchy on #fafafa, all levels meet WCAG AA 4.5:1 */
+  --solm-bg: #fafafa;
+  --solm-surface: #f3f3f3;
+  --solm-surface-raised: #ffffff;
+  --solm-border: #e0e0e0;
+  --solm-border-subtle: #ebebeb;
+  --solm-border-strong: #d4d4d4;
+  --solm-border-muted: #c8c8c8;
+  --solm-border-hover: #bdbdbd;
+  --solm-border-active: #9e9e9e;
+  --solm-border-selected: #757575;
+  --solm-border-focus: #6e6e6e;
+  --solm-border-emphasis: #1a1a1a;
+  --solm-cta-bg: #1a1a1a;
+  --solm-cta-fg: #fafafa;
+  --solm-cta-disabled-bg: #e8e8e8;
+  --solm-cta-disabled-fg: #9e9e9e;
+  --solm-text-1: #1a1a1a; /* primary: headings, main content */
+  --solm-text-2: #4d4d4d; /* body: descriptions, previews */
+  --solm-text-3: #5e5e5e; /* labels: section headers, status */
+  --solm-text-4: #6e6e6e; /* muted: hints, secondary buttons */
   --solm-text-5: #757575; /* subtle: back links, tertiary actions */
-  --solm-text-error: #d08080;
-  --solm-text-accent: #b8a070;
+  --solm-text-error: #b04040;
+  --solm-text-accent: #8a7040;
+  --solm-shadow: rgba(0, 0, 0, 0.12);
+  --solm-mockup-ring: #e8e8e8;
+  --solm-mockup-bezel: #f5f5f5;
+  --solm-mockup-notch: #e0e0e0;
+  --solm-overlay-surface: #ffffff;
 
   --background: #ffffff;
   --foreground: oklch(0.145 0 0);
@@ -53,6 +73,36 @@
 }
 
 .dark {
+  /* Dark mode — text hierarchy on #0c0c0c, all levels meet WCAG AA 4.5:1 */
+  --solm-bg: #0c0c0c;
+  --solm-surface: #0f0f0f;
+  --solm-surface-raised: #0c0c0c;
+  --solm-border: #1a1a1a;
+  --solm-border-subtle: #1a1a1a;
+  --solm-border-strong: #242424;
+  --solm-border-muted: #2a2a2a;
+  --solm-border-hover: #333333;
+  --solm-border-active: #383838;
+  --solm-border-selected: #444444;
+  --solm-border-focus: #333333;
+  --solm-border-emphasis: #f2f2f2;
+  --solm-cta-bg: #f2f2f2;
+  --solm-cta-fg: #0c0c0c;
+  --solm-cta-disabled-bg: #1a1a1a;
+  --solm-cta-disabled-fg: #757575;
+  --solm-text-1: #f2f2f2;
+  --solm-text-2: #b3b3b3;
+  --solm-text-3: #9e9e9e;
+  --solm-text-4: #8a8a8a;
+  --solm-text-5: #757575;
+  --solm-text-error: #d08080;
+  --solm-text-accent: #b8a070;
+  --solm-shadow: rgba(0, 0, 0, 0.7);
+  --solm-mockup-ring: #111111;
+  --solm-mockup-bezel: #0c0c0c;
+  --solm-mockup-notch: #1a1a1a;
+  --solm-overlay-surface: #111111;
+
   --background: #0c0c0c;
   --foreground: oklch(0.985 0 0);
   --card: #0c0c0c;
@@ -135,6 +185,20 @@
   --color-solm-5: var(--solm-text-5);
   --color-solm-error: var(--solm-text-error);
   --color-solm-accent: var(--solm-text-accent);
+  --color-solm-bg: var(--solm-bg);
+  --color-solm-surface: var(--solm-surface);
+  --color-solm-surface-raised: var(--solm-surface-raised);
+  --color-solm-border: var(--solm-border);
+  --color-solm-border-strong: var(--solm-border-strong);
+  --color-solm-border-muted: var(--solm-border-muted);
+  --color-solm-border-hover: var(--solm-border-hover);
+  --color-solm-border-active: var(--solm-border-active);
+  --color-solm-border-selected: var(--solm-border-selected);
+  --color-solm-border-focus: var(--solm-border-focus);
+  --color-solm-border-emphasis: var(--solm-border-emphasis);
+  --color-solm-cta-bg: var(--solm-cta-bg);
+  --color-solm-cta-fg: var(--solm-cta-fg);
+  --color-solm-overlay-surface: var(--solm-overlay-surface);
 }
 
 @layer base {

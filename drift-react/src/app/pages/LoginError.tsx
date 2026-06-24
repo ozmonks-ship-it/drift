@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router';
 import { InAppBrowserBanner } from '../components/InAppBrowserBanner';
 import { LoginLogoHero } from '../components/LogoLockup';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 type LoginErrorProps = {
   onGoogle: () => void;
@@ -17,6 +18,9 @@ export function LoginError({
 
   return (
     <div className="flex flex-col min-h-[100dvh] px-8 py-12">
+      <div className="flex justify-end mb-4">
+        <ThemeToggle />
+      </div>
       <div className="flex-1 flex flex-col justify-center">
         <LoginLogoHero />
       </div>
@@ -27,8 +31,7 @@ export function LoginError({
           type="button"
           disabled={isSubmitting || inAppBrowser}
           onClick={onGoogle}
-          className="w-full rounded-2xl py-5 px-6 flex items-center justify-center gap-3 transition-opacity active:opacity-80 disabled:opacity-60"
-          style={{ background: '#f2f2f2', color: '#0c0c0c' }}
+          className="w-full rounded-2xl py-5 px-6 flex items-center justify-center gap-3 transition-opacity active:opacity-80 disabled:opacity-60 bg-solm-cta-bg text-solm-cta-fg"
         >
           <GoogleIcon />
           <span style={{ fontSize: '16px', fontWeight: 400 }}>

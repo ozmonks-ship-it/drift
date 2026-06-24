@@ -3,8 +3,8 @@
 @import './theme.css';
 
 html {
-  color-scheme: dark;
-  background-color: #0c0c0c;
+  color-scheme: light dark;
+  background-color: var(--solm-bg);
 }
 
 html,

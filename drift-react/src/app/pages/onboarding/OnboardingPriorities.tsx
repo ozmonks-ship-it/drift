@@ -98,7 +98,7 @@ export function OnboardingPriorities() {
 
       <div className="mb-8">
         <h2
-          className="text-white mb-3"
+          className="text-solm-1 mb-3"
           style={{ fontSize: '26px', fontWeight: 300, letterSpacing: '-0.02em', lineHeight: 1.3 }}
         >
           What matters most in your life right now?
@@ -124,7 +124,7 @@ export function OnboardingPriorities() {
                 style={{
                   fontSize: '14px',
                   fontWeight: 300,
-                  borderColor: isSelected ? '#ffffff' : '#242424',
+                  borderColor: isSelected ? 'var(--solm-border-emphasis)' : 'var(--solm-border-strong)',
                   color: isSelected ? 'var(--solm-text-1)' : isDisabled ? 'var(--solm-text-5)' : 'var(--solm-text-4)',
                   background: 'transparent',
                   cursor: isDisabled ? 'default' : 'pointer',
@@ -164,7 +164,7 @@ export function OnboardingPriorities() {
                 value={otherText}
                 onChange={(e) => setOtherText(e.target.value)}
                 placeholder="What else matters to you?"
-                className="w-full rounded-2xl border border-[#1e1e1e] bg-transparent outline-none transition-colors focus:border-[#333] placeholder:text-solm-5"
+                className="w-full rounded-2xl border border-solm-border-strong bg-transparent outline-none transition-colors focus:border-solm-border-focus placeholder:text-solm-5"
                 style={{
                   fontSize: '14px',
                   fontWeight: 300,
@@ -187,8 +187,8 @@ export function OnboardingPriorities() {
           type="button"
           disabled={!canProceed}
           onClick={handleNext}
-          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed"
-          style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
+          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed bg-solm-cta-bg text-solm-cta-fg"
+          style={{ fontSize: '17px', fontWeight: 400 }}
         >
           <span>{fromSettings ? 'Save' : 'Next'}</span>
           <span>→</span>

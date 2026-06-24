@@ -71,7 +71,7 @@ export function Add() {
           new task
         </p>
         <h2
-          className="text-white"
+          className="text-solm-1"
           style={{
             fontSize: "28px",
             fontWeight: 300,
@@ -91,7 +91,7 @@ export function Add() {
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Describe your task..."
-          className="flex-1 w-full bg-transparent resize-none text-solm-1 placeholder:text-solm-3 outline-none border-b border-[#1e1e1e] focus:border-solm-3 transition-colors pb-4"
+          className="flex-1 w-full bg-transparent resize-none text-solm-1 placeholder:text-solm-3 outline-none border-b border-solm-border-strong focus:border-solm-3 transition-colors pb-4"
           style={{
             fontSize: "20px",
             fontWeight: 300,
@@ -110,8 +110,8 @@ export function Add() {
           disabled={!value.trim()}
           className="w-full rounded-2xl py-5 px-6 transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed"
           style={{
-            background: value.trim() ? "#f2f2f2" : "#1a1a1a",
-            color: "#0c0c0c",
+            background: value.trim() ? 'var(--solm-cta-bg)' : 'var(--solm-cta-disabled-bg)',
+            color: value.trim() ? 'var(--solm-cta-fg)' : 'var(--solm-cta-disabled-fg)',
           }}
         >
           <span style={{ fontSize: "17px", fontWeight: 400 }}>

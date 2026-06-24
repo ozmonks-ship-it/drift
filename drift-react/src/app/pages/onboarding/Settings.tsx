@@ -8,6 +8,7 @@ import {
   parseWorkStyle,
   type UserContext,
 } from '../../../lib/userContext';
+import { AppearanceSetting } from '../../components/AppearanceSetting';
 
 const ALL_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -21,7 +22,7 @@ function SectionCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-[#1a1a1a] p-5">
+    <div className="rounded-2xl border border-solm-border p-5">
       <div className="flex items-center justify-between mb-4">
         <p
           className="tracking-[0.22em] uppercase"
@@ -102,13 +103,15 @@ export function Settings() {
         your context
       </p>
       <h1
-        className="text-white mb-10"
+        className="text-solm-1 mb-10"
         style={{ fontSize: '32px', fontWeight: 300, letterSpacing: '-0.02em' }}
       >
         Settings
       </h1>
 
       <div className="flex-1 flex flex-col gap-4">
+        <AppearanceSetting />
+
         <SectionCard
           label="Priorities"
           onEdit={() => navigate('/onboarding/priorities?from=settings')}
@@ -117,7 +120,7 @@ export function Settings() {
             {ctx.priorities.map((p) => (
               <span
                 key={p}
-                className="rounded-2xl border border-[#242424] px-3 py-1.5"
+                className="rounded-2xl border border-solm-border-strong px-3 py-1.5"
                 style={{ fontSize: '13px', fontWeight: 300, color: 'var(--solm-text-4)' }}
               >
                 {formatPriorityLabel(p, ctx.other_priority)}
@@ -162,7 +165,7 @@ export function Settings() {
                 {ctx.tendencies.map((t) => (
                   <span
                     key={t}
-                    className="rounded-2xl border border-[#1e1e1e] px-3 py-1.5"
+                    className="rounded-2xl border border-solm-border-strong px-3 py-1.5"
                     style={{ fontSize: '12px', fontWeight: 300, color: 'var(--solm-text-5)' }}
                   >
                     {t}
@@ -193,7 +196,7 @@ export function Settings() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      borderColor: active ? '#383838' : '#1a1a1a',
+                      borderColor: active ? 'var(--solm-border-active)' : 'var(--solm-border)',
                       color: active ? 'var(--solm-text-2)' : 'var(--solm-text-5)',
                     }}
                   >

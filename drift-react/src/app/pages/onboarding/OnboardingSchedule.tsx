@@ -73,7 +73,7 @@ export function OnboardingSchedule() {
       )}
 
       <h2
-        className="text-white mb-10"
+        className="text-solm-1 mb-10"
         style={{ fontSize: '26px', fontWeight: 300, letterSpacing: '-0.02em', lineHeight: 1.3 }}
       >
         When do you have time for focused work?
@@ -101,7 +101,7 @@ export function OnboardingSchedule() {
                     fontWeight: 300,
                     width: '42px',
                     height: '42px',
-                    borderColor: active ? '#ffffff' : '#242424',
+                    borderColor: active ? 'var(--solm-border-emphasis)' : 'var(--solm-border-strong)',
                     color: active ? 'var(--solm-text-1)' : 'var(--solm-text-4)',
                     background: 'transparent',
                   }}
@@ -125,7 +125,7 @@ export function OnboardingSchedule() {
             onChange={(e) => setNotes(e.target.value)}
             placeholder="e.g. I pick up kids on Tuesdays, Thursday evenings are date night..."
             rows={4}
-            className="w-full rounded-2xl border border-[#1e1e1e] bg-transparent resize-none outline-none transition-colors focus:border-[#333] placeholder:text-solm-5"
+            className="w-full rounded-2xl border border-solm-border-strong bg-transparent resize-none outline-none transition-colors focus:border-solm-border-focus placeholder:text-solm-5"
             style={{
               fontSize: '14px',
               fontWeight: 300,
@@ -142,8 +142,8 @@ export function OnboardingSchedule() {
           type="button"
           disabled={!canProceed}
           onClick={handleNext}
-          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed"
-          style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
+          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-all duration-200 disabled:opacity-20 disabled:cursor-not-allowed bg-solm-cta-bg text-solm-cta-fg"
+          style={{ fontSize: '17px', fontWeight: 400 }}
         >
           <span>{fromSettings ? 'Save' : 'Next'}</span>
           <span>→</span>

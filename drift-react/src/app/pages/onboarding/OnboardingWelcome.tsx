@@ -18,7 +18,7 @@ export function OnboardingWelcome() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <SolmLogo size="lg" className="text-white mb-6" />
+          <SolmLogo size="lg" className="text-solm-1 mb-6" />
           <p
             style={{
               fontSize: '18px',
@@ -42,8 +42,8 @@ export function OnboardingWelcome() {
         <button
           type="button"
           onClick={() => navigate('/onboarding/priorities')}
-          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-opacity active:opacity-80"
-          style={{ background: '#f2f2f2', color: '#0c0c0c', fontSize: '17px', fontWeight: 400 }}
+          className="w-full rounded-2xl py-5 px-6 flex items-center justify-between transition-opacity active:opacity-80 bg-solm-cta-bg text-solm-cta-fg"
+          style={{ fontSize: '17px', fontWeight: 400 }}
         >
           <span>Let&apos;s go</span>
           <span>→</span>

@@ -143,7 +143,7 @@ export function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <SolmLogo size="lg" className="text-white" />
+          <SolmLogo size="lg" className="text-solm-1" />
         </motion.div>
 
         {/* Status */}
@@ -154,7 +154,7 @@ export function Home() {
           transition={{ delay: 0.35 }}
         >
           {workingTask ? (
-            <div className="border border-[#1e1e1e] rounded-2xl p-5">
+            <div className="border border-solm-border-strong rounded-2xl p-5">
               <p
                 className="text-solm-3 mb-2"
                 style={{
@@ -237,7 +237,7 @@ export function Home() {
                       style={{
                         color: isSelected ? "var(--solm-text-2)" : "var(--solm-text-4)",
                         fontSize: "16px",
-                        borderColor: isSelected ? "#444" : "#242424",
+                        borderColor: isSelected ? "var(--solm-border-selected)" : "var(--solm-border-strong)",
                       }}
                     >
                       {option.label}
@@ -261,8 +261,7 @@ export function Home() {
           <button
             onClick={handleNext}
             disabled={!hasAnything}
-            className="w-full rounded-2xl py-5 px-6 transition-all duration-200 disabled:opacity-15 disabled:cursor-not-allowed flex items-center justify-between"
-            style={{ background: "#f2f2f2", color: "#0c0c0c" }}
+            className="w-full rounded-2xl py-5 px-6 transition-all duration-200 disabled:opacity-15 disabled:cursor-not-allowed flex items-center justify-between bg-solm-cta-bg text-solm-cta-fg"
           >
             <span style={{ fontSize: "17px", fontWeight: 400 }}>
               {workingTask ? "Resume task" : "What's next?"}
@@ -272,7 +271,7 @@ export function Home() {
 
           <button
             onClick={() => navigate("/add")}
-            className="w-full rounded-2xl py-5 px-6 border border-[#1e1e1e] hover:border-[#2a2a2a] transition-colors flex items-center justify-between"
+            className="w-full rounded-2xl py-5 px-6 border border-solm-border-strong hover:border-solm-border-muted transition-colors flex items-center justify-between"
             style={{ color: "var(--solm-text-4)" }}
           >
             <span style={{ fontSize: "17px", fontWeight: 400 }}>Add task</span>

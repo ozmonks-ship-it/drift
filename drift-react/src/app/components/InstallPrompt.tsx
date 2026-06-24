@@ -86,10 +86,10 @@ export function InstallPrompt() {
   if (!shouldShow) return null;
 
   return (
-    <div className="fixed bottom-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-[420px] -translate-x-1/2 rounded-2xl border border-[#2a2a2a] bg-[#111] px-4 py-3 text-solm-1 shadow-lg">
+    <div className="fixed bottom-4 left-1/2 z-50 w-[calc(100%-2rem)] max-w-[420px] -translate-x-1/2 rounded-2xl border border-solm-border-muted bg-solm-overlay-surface px-4 py-3 text-solm-1 shadow-lg">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-white">Install solm</p>
+          <p className="text-sm font-medium text-solm-1">Install solm</p>
           {canUseNativePrompt ? (
             <p className="mt-1 text-xs text-solm-3">Add solm to your home screen for a faster, app-like experience.</p>
           ) : (
@@ -99,7 +99,7 @@ export function InstallPrompt() {
         <button
           type="button"
           onClick={dismiss}
-          className="rounded px-1 text-solm-4 transition hover:text-white"
+          className="rounded px-1 text-solm-4 transition hover:text-solm-1"
           aria-label="Dismiss install prompt"
         >
           ×
@@ -110,7 +110,7 @@ export function InstallPrompt() {
         <button
           type="button"
           onClick={requestInstall}
-          className="mt-3 w-full rounded-xl bg-[#f2f2f2] px-4 py-2 text-sm font-medium text-[#0c0c0c] transition hover:bg-white"
+          className="mt-3 w-full rounded-xl bg-solm-cta-bg px-4 py-2 text-sm font-medium text-solm-cta-fg transition hover:opacity-90"
         >
           Install app
         </button>

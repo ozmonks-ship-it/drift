@@ -17,7 +17,7 @@ export type LogoLockupProps = {
   className?: string;
 };
 
-export function LogoLockup({ color = '#ffffff', size = 'lg', className }: LogoLockupProps) {
+export function LogoLockup({ color = 'var(--solm-text-1)', size = 'lg', className }: LogoLockupProps) {
   const markPx = sizeConfig[size].mark;
   const scale = markPx / circleDiameterSvg;
   const width = lockupViewBox.w * scale;
@@ -43,7 +43,7 @@ export function LogoLockup({ color = '#ffffff', size = 'lg', className }: LogoLo
 export function LoginLogoHero({ size = 'lg' }: { size?: SolmLogoSize }) {
   return (
     <>
-      <LogoLockup color="#ffffff" size={size} />
+      <LogoLockup size={size} />
       <p
         style={{
           marginTop: '6px',
