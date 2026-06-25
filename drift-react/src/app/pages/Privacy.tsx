@@ -84,7 +84,7 @@ export function Privacy() {
             ].map(([label, desc]) => (
               <li
                 key={label}
-                style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
+                style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
               >
                 <span className="text-solm-2">{label} — </span>
                 {desc}
@@ -109,7 +109,7 @@ export function Privacy() {
             ].map((item) => (
               <li
                 key={item}
-                style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
+                style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
               >
                 {item}
               </li>
@@ -127,7 +127,7 @@ export function Privacy() {
         <Section title="Who else sees your data">
           <p
             className="mb-6"
-            style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
+            style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
           >
             To run Solm, we use a small set of third-party services. Each one sees a specific
             slice of your data:
@@ -165,7 +165,7 @@ export function Privacy() {
         </Section>
 
         <Section title="Cookies and local storage">
-          <p style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}>
             Solm uses your browser's local storage to keep you signed in and to remember
             interface preferences. PostHog sets a cookie to recognise your device across
             sessions. No advertising cookies are used.
@@ -188,7 +188,7 @@ export function Privacy() {
             ].map(([label, desc]) => (
               <li
                 key={label}
-                style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
+                style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
               >
                 <span className="text-solm-2">{label} — </span>
                 {desc}
@@ -207,7 +207,7 @@ export function Privacy() {
             ].map((item) => (
               <li
                 key={item}
-                style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
+                style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
               >
                 {item}
               </li>
@@ -226,7 +226,7 @@ export function Privacy() {
         <Section title="Your rights">
           <p
             className="mb-4"
-            style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
+            style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
           >
             Under the Australian Privacy Principles, you can:
           </p>
@@ -239,13 +239,13 @@ export function Privacy() {
             ].map((item) => (
               <li
                 key={item}
-                style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
+                style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}
               >
                 {item}
               </li>
             ))}
           </ul>
-          <p style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}>
             To exercise any of these, email{' '}
             <a
               href="mailto:ozgurmonkul@gmail.com"
@@ -258,7 +258,7 @@ export function Privacy() {
         </Section>
 
         <Section title="Changes to this policy">
-          <p style={{ fontSize: '14px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}>
+          <p style={{ fontSize: '15px', fontWeight: 300, color: 'var(--solm-text-4)', lineHeight: 1.7 }}>
             If we make material changes — new data we collect, new providers we use — we will
             update this page and note the new effective date at the top. If you're a logged-in
             user, we'll also surface a notice the next time you open the app.

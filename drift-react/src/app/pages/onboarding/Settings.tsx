@@ -26,7 +26,7 @@ function SectionCard({
       <div className="flex items-center justify-between mb-4">
         <p
           className="tracking-[0.22em] uppercase"
-          style={{ fontSize: '10px', color: 'var(--solm-text-3)' }}
+          style={{ fontSize: '11px', color: 'var(--solm-text-3)' }}
         >
           {label}
         </p>
@@ -138,7 +138,7 @@ export function Settings() {
               <div className="flex items-baseline gap-3">
                 <span
                   className="tracking-[0.15em] uppercase"
-                  style={{ fontSize: '10px', color: 'var(--solm-text-3)', flexShrink: 0 }}
+                  style={{ fontSize: '11px', color: 'var(--solm-text-3)', flexShrink: 0 }}
                 >
                   Type
                 </span>
@@ -151,7 +151,7 @@ export function Settings() {
               <div className="flex items-baseline gap-3">
                 <span
                   className="tracking-[0.15em] uppercase"
-                  style={{ fontSize: '10px', color: 'var(--solm-text-3)', flexShrink: 0 }}
+                  style={{ fontSize: '11px', color: 'var(--solm-text-3)', flexShrink: 0 }}
                 >
                   Focus
                 </span>

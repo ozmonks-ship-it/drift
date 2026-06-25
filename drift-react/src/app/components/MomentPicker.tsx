@@ -140,7 +140,7 @@ export function MomentPicker({ open, onClose, onSelect }: MomentPickerProps) {
                               placeholder="Describe where you are…"
                               className="flex-1 rounded-2xl border border-solm-border-strong bg-transparent outline-none transition-colors focus:border-solm-border-focus placeholder:text-solm-5 text-solm-2"
                               style={{
-                                fontSize: '14px',
+                                fontSize: '16px',
                                 fontWeight: 300,
                                 padding: '12px 16px',
                               }}

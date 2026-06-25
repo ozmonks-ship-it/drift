@@ -158,7 +158,7 @@ export function Home() {
               <p
                 className="text-solm-3 mb-2"
                 style={{
-                  fontSize: "10px",
+                  fontSize: "11px",
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
                 }}

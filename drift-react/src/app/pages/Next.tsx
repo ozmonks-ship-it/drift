@@ -232,7 +232,7 @@ export function Next() {
             </div>
             <motion.p
               className="text-solm-3 tracking-[0.28em] uppercase"
-              style={{ fontSize: '10px' }}
+              style={{ fontSize: '11px' }}
               animate={{ opacity: [0.75, 1, 0.75] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
             >
@@ -323,7 +323,7 @@ export function Next() {
                           >
                             <p
                               className="text-solm-3 tracking-[0.2em] uppercase mb-3"
-                              style={{ fontSize: '10px' }}
+                              style={{ fontSize: '11px' }}
                             >
                               claude's reasoning
                             </p>

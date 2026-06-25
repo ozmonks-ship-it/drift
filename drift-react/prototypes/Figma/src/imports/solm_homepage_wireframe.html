@@ -1,0 +1,143 @@
+<style>
+.wf-nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.wf-logo { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 16px; color: var(--color-text-primary); }
+.wf-logo-ring { width: 24px; height: 24px; }
+.wf-signin-sm { font-size: 13px; color: var(--color-text-secondary); background: none; border: 0.5px solid var(--color-border-secondary); padding: 6px 14px; border-radius: var(--border-radius-md); cursor: pointer; }
+.wf-hero { padding: 56px 24px 48px; text-align: center; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.wf-hero h1 { font-size: 48px; font-weight: 500; letter-spacing: -0.5px; margin: 0 0 12px; color: var(--color-text-primary); line-height: 1.1; }
+.wf-hero p { font-size: 17px; color: var(--color-text-secondary); max-width: 380px; margin: 0 auto 32px; line-height: 1.6; }
+.wf-cta { display: inline-flex; align-items: center; gap: 10px; background: var(--color-text-primary); color: var(--color-background-primary); padding: 13px 24px; border-radius: var(--border-radius-md); font-size: 15px; font-weight: 500; cursor: pointer; border: none; }
+.wf-cta-sub { font-size: 12px; color: var(--color-text-tertiary); margin-top: 12px; }
+.wf-phone { width: 160px; height: 280px; border: 1.5px solid var(--color-border-secondary); border-radius: 20px; margin: 40px auto 0; display: flex; flex-direction: column; overflow: hidden; background: var(--color-background-secondary); }
+.wf-phone-bar { background: var(--color-background-tertiary); padding: 10px 14px 8px; font-size: 10px; color: var(--color-text-tertiary); border-bottom: 0.5px solid var(--color-border-tertiary); }
+.wf-phone-mode { display: flex; gap: 6px; padding: 10px 14px; }
+.wf-mode-pill { font-size: 10px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); }
+.wf-mode-pill.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+.wf-phone-task { margin: 12px 14px; background: var(--color-background-primary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); padding: 14px 12px; }
+.wf-phone-task p { font-size: 10px; color: var(--color-text-tertiary); margin: 0 0 6px; }
+.wf-phone-task h4 { font-size: 13px; font-weight: 500; margin: 0 0 8px; color: var(--color-text-primary); }
+.wf-phone-btns { display: flex; gap: 4px; margin-top: 8px; }
+.wf-phone-btn { flex: 1; font-size: 9px; padding: 5px 0; border-radius: 6px; border: 0.5px solid var(--color-border-secondary); text-align: center; color: var(--color-text-secondary); }
+.wf-section { padding: 48px 24px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.wf-section-label { font-size: 12px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; }
+.wf-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.wf-step { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 20px 16px; }
+.wf-step-num { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 8px; }
+.wf-step h3 { font-size: 14px; font-weight: 500; margin: 0 0 6px; color: var(--color-text-primary); }
+.wf-step p { font-size: 12px; color: var(--color-text-secondary); margin: 0; line-height: 1.5; }
+.wf-why { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.wf-why-card { padding: 16px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); }
+.wf-why-card i { font-size: 20px; color: var(--color-text-secondary); margin-bottom: 10px; display: block; }
+.wf-why-card h3 { font-size: 13px; font-weight: 500; margin: 0 0 4px; }
+.wf-why-card p { font-size: 12px; color: var(--color-text-secondary); margin: 0; line-height: 1.5; }
+.wf-login-wall { background: var(--color-background-secondary); border-radius: var(--border-radius-lg); padding: 32px 24px; text-align: center; margin: 0 24px 24px; border: 0.5px solid var(--color-border-tertiary); }
+.wf-login-wall h2 { font-size: 18px; font-weight: 500; margin: 0 0 8px; }
+.wf-login-wall p { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 20px; }
+.wf-google-btn { display: inline-flex; align-items: center; gap: 10px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); padding: 11px 20px; border-radius: var(--border-radius-md); font-size: 14px; font-weight: 500; cursor: pointer; }
+.wf-footer { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+.wf-footer p { font-size: 12px; color: var(--color-text-tertiary); margin: 0; }
+.wf-badge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-tertiary); margin-left: 6px; }
+</style>
+
+<h2 class="sr-only">Solm homepage wireframe — combined login and marketing page for new and existing users</h2>
+
+<div style="border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-xl); overflow: hidden; max-width: 640px; margin: 0 auto;">
+
+  <nav class="wf-nav">
+    <div class="wf-logo">
+      <svg class="wf-logo-ring" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1"/>
+        <circle cx="12" cy="12" r="4" fill="currentColor"/>
+      </svg>
+      Solm
+      <span class="wf-badge">Beta</span>
+    </div>
+    <button class="wf-signin-sm">Sign in</button>
+  </nav>
+
+  <div class="wf-hero">
+    <h1>The one thing.</h1>
+    <p>A focus app that picks your next task — no lists to sort, no decisions to make.</p>
+    <button class="wf-cta">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      Continue with Google
+    </button>
+    <p class="wf-cta-sub">New to Solm? You'll join the beta queue.</p>
+
+    <div class="wf-phone" aria-hidden="true">
+      <div class="wf-phone-bar">Solm</div>
+      <div class="wf-phone-mode">
+        <div class="wf-mode-pill active">☀️ Let's go</div>
+        <div class="wf-mode-pill">⚡ Quick one</div>
+      </div>
+      <div class="wf-phone-task">
+        <p>Up next</p>
+        <h4>Review beta feedback from Selin</h4>
+        <div class="wf-phone-btns">
+          <div class="wf-phone-btn">Done ✓</div>
+          <div class="wf-phone-btn">Not now</div>
+          <div class="wf-phone-btn">Skip</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-section">
+    <p class="wf-section-label">How it works</p>
+    <div class="wf-steps">
+      <div class="wf-step">
+        <p class="wf-step-num">01</p>
+        <h3>Capture tasks</h3>
+        <p>Add anything on your mind. Work, personal, errands — all in one place.</p>
+      </div>
+      <div class="wf-step">
+        <p class="wf-step-num">02</p>
+        <h3>Pick your mode</h3>
+        <p>☀️ Got time? Or ⚡ just a few minutes? Solm adjusts to your energy.</p>
+      </div>
+      <div class="wf-step">
+        <p class="wf-step-num">03</p>
+        <h3>Solm picks one</h3>
+        <p>AI surfaces the single best next task. Do it, then get the next one.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-section">
+    <p class="wf-section-label">Why Solm</p>
+    <div class="wf-why">
+      <div class="wf-why-card">
+        <i class="ti ti-bolt" aria-hidden="true"></i>
+        <h3>No decision fatigue</h3>
+        <p>Stop staring at your list. One task, then the next.</p>
+      </div>
+      <div class="wf-why-card">
+        <i class="ti ti-brain" aria-hidden="true"></i>
+        <h3>Priority-aware</h3>
+        <p>Knows what matters to you — family, health, work — and picks accordingly.</p>
+      </div>
+      <div class="wf-why-card">
+        <i class="ti ti-device-mobile" aria-hidden="true"></i>
+        <h3>Works anywhere</h3>
+        <p>Install as an app on iPhone, Android, or desktop. No App Store needed.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 48px 0 24px;">
+    <div class="wf-login-wall">
+      <h2>Already on Solm?</h2>
+      <p>Sign in with the same Google account you used to join.</p>
+      <button class="wf-google-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+
+  <footer class="wf-footer">
+    <p>Solm · Beta · Made by Oz</p>
+    <p style="font-size:12px; color: var(--color-text-tertiary);">getsolm.com</p>
+  </footer>
+
+</div>

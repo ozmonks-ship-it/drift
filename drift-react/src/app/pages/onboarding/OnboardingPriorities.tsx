@@ -133,7 +133,7 @@ export function OnboardingPriorities() {
                 {isSelected && (
                   <span
                     style={{
-                      fontSize: '10px',
+                      fontSize: '11px',
                       color: 'var(--solm-text-2)',
                       fontWeight: 400,
                       letterSpacing: '0.05em',
@@ -166,7 +166,7 @@ export function OnboardingPriorities() {
                 placeholder="What else matters to you?"
                 className="w-full rounded-2xl border border-solm-border-strong bg-transparent outline-none transition-colors focus:border-solm-border-focus placeholder:text-solm-5"
                 style={{
-                  fontSize: '14px',
+                  fontSize: '16px',
                   fontWeight: 300,
                   color: 'var(--solm-text-2)',
                   padding: '14px 20px',

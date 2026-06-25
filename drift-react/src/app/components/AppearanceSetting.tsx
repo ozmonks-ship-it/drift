@@ -23,7 +23,7 @@ export function AppearanceSetting() {
     <div className="rounded-2xl border border-solm-border p-5">
       <p
         className="tracking-[0.22em] uppercase mb-4"
-        style={{ fontSize: '10px', color: 'var(--solm-text-3)' }}
+        style={{ fontSize: '11px', color: 'var(--solm-text-3)' }}
       >
         Appearance
       </p>

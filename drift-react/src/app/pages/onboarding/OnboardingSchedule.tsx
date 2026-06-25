@@ -127,7 +127,7 @@ export function OnboardingSchedule() {
             rows={4}
             className="w-full rounded-2xl border border-solm-border-strong bg-transparent resize-none outline-none transition-colors focus:border-solm-border-focus placeholder:text-solm-5"
             style={{
-              fontSize: '14px',
+              fontSize: '16px',
               fontWeight: 300,
               color: 'var(--solm-text-2)',
               padding: '16px 20px',
