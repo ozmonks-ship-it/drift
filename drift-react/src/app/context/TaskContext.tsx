@@ -181,6 +181,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       .eq('id', id)
       .eq('user_id', user.id);
     setTasks(prev => prev.map(t => t.id === id ? { ...t, status: 'binned' } : t));
+    setNextTaskId(prev => (prev === id ? null : prev));
     track('task_binned', { task_id: id });
   }, []);
 

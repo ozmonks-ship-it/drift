@@ -123,10 +123,40 @@ export function Next() {
 
   const handleBin = () => {
     if (!displayTask) return;
+    setPhase('finding');
+    setIsPickingNextTask(true);
     setExiting('bin');
     setTimeout(async () => {
+      setExiting(null);
       await binTask(displayTask.id);
-      navigate('/');
+      const mode = pickModeFromLocationState(location.state);
+      const moment =
+        location.state && typeof location.state === 'object'
+          ? (location.state as NextPickLocationState).moment
+          : undefined;
+      if (mode) {
+        const pending = tasks
+          .filter(t => t.status === 'pending' && t.id !== displayTask.id);
+        try {
+          const ctx = userContext ?? (await fetchUserContext());
+          const pick = await pickNextTask(
+            pending,
+            mode,
+            sessionDriftedTasks,
+            ctx,
+            moment
+          );
+          setNextTask(pick.id);
+          setPickSource(pick.source);
+          setPickReasoning(pick.reasoning);
+          setExiting(null);
+        } finally {
+          setIsPickingNextTask(false);
+        }
+      } else {
+        setIsPickingNextTask(false);
+        navigate('/');
+      }
     }, 300);
   };
 
