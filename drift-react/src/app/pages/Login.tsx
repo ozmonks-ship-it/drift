@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import posthog from 'posthog-js';
 import { InAppBrowserBanner } from '../components/InAppBrowserBanner';
 import { SolmMark } from '../components/SolmLogo';
 import { ThemeToggle } from '../components/ThemeToggle';
@@ -28,7 +29,12 @@ export function Login() {
     }
   }, []);
 
-  const handleGoogle = useCallback(async () => {
+  const handleGoogle = useCallback(async (source: string) => {
+    try {
+      posthog.capture('google_signin_clicked', { source });
+    } catch {
+      // ignore — PostHog may not be initialised in dev
+    }
     setHasError(false);
     setIsSubmitting(true);
     const { error } = await supabase.auth.signInWithOAuth({
@@ -50,7 +56,7 @@ export function Login() {
   if (hasError) {
     return (
       <LoginError
-        onGoogle={handleGoogle}
+        onGoogle={() => handleGoogle('error_retry')}
         isSubmitting={isSubmitting}
         inAppBrowser={inAppBrowser}
       />
@@ -112,7 +118,7 @@ export function Login() {
           <button
             type="button"
             disabled={isSubmitting || inAppBrowser}
-            onClick={handleGoogle}
+            onClick={() => handleGoogle('landing_hero')}
             className="flex items-center justify-center gap-3 rounded-2xl px-6 py-4 transition-opacity active:opacity-80 disabled:opacity-60 bg-solm-cta-bg text-solm-cta-fg"
             style={{ fontSize: '15px', fontWeight: 500 }}
           >
@@ -246,7 +252,7 @@ export function Login() {
             <button
               type="button"
               disabled={isSubmitting || inAppBrowser}
-              onClick={handleGoogle}
+              onClick={() => handleGoogle('returning_signin')}
               className="flex items-center justify-center gap-3 rounded-2xl px-5 py-3.5 transition-colors hover:border-solm-border-hover disabled:opacity-60 border border-solm-border-strong bg-solm-bg"
               style={{
                 fontSize: '14px',
